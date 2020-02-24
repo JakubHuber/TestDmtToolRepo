@@ -196,11 +196,12 @@ Partial Class DmtFormMain
         'AttachmentName
         '
         Me.AttachmentName.Text = "AttchName"
-        Me.AttachmentName.Width = 280
+        Me.AttachmentName.Width = 275
         '
         'Status
         '
         Me.Status.Text = "Status"
+        Me.Status.Width = 70
         '
         'ListBoxErps
         '
@@ -317,7 +318,6 @@ Partial Class DmtFormMain
         Me.Name = "DmtFormMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "DmtFormMain"
-        Me.TopMost = True
         Me.ToolStripMain.ResumeLayout(False)
         Me.ToolStripMain.PerformLayout()
         Me.pdfBox.ResumeLayout(False)

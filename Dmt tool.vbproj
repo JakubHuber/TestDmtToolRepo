@@ -31,13 +31,13 @@
     </StartupObject>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>\\eu001-sp.shell.com\sites\AAAAA4854\GlobalProjects\TMToolkit\myRTV\Global-RTV-Repository\Shared Documents\DmtPublishTest\</PublishUrl>
+    <PublishUrl>C:\Users\jakub.huber\OneDrive - Shell\Automation\DMT tool\DmtVS\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.5</ApplicationVersion>
+    <ApplicationVersion>1.0.0.6</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateInterval>2</UpdateInterval>
+    <UpdateInterval>1</UpdateInterval>
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
     <ProductName>Dmt tool</ProductName>
     <PublisherName>Jakub Huber</PublisherName>

@@ -129,6 +129,7 @@ Public Class DmtFormMain
         Dim oAttachment As Attachment
         Dim attachmentSaveName As String
         Dim olistItem As ListViewItem
+        Dim attachmentStatus As dmtStatuses
 
         If Not Directory.Exists(My.Resources.temporaryFolderPath) Then
             Directory.CreateDirectory(My.Resources.temporaryFolderPath)
@@ -146,15 +147,19 @@ Public Class DmtFormMain
 
                     olistItem = New ListViewItem(mailNumber.ToString)
                     olistItem.SubItems.Add(oAttachment.FileName.ToString)
-                    olistItem.SubItems.Add(DirectCast(getAttachmentStatusByIndex(oAttachment.Index, oMail), dmtStatuses).ToString)
+
+                    attachmentStatus = DirectCast(getAttachmentStatusByIndex(oAttachment.Index, oMail), dmtStatuses)
+                    olistItem.SubItems.Add(attachmentStatus.ToString)
+                    If attachmentStatus = dmtStatuses.Complete Then ColorListViewLine(olistItem)
+
                     olistItem.SubItems.Add(oAttachment.Index.ToString)
                     olistItem.SubItems.Add(oMail.EntryID.ToString)
 
                     ListViewAttachments.Items.Add(olistItem)
 
-                End If
+                    End If
 
-            End If
+                End If
         Next
 
     End Sub
@@ -257,6 +262,7 @@ Public Class DmtFormMain
         Return detailText.ToString.Remove(detailText.Length - 1, 1)
 
     End Function
+
     'Private Sub ClosePreviousOpenedPdf()
 
     '    'If Not pdfDoc Is Nothing Then pdfDoc.Close()
@@ -653,28 +659,77 @@ Public Class DmtFormMain
             For Each oListItem In ListViewAttachments.SelectedItems
 
                 oMail = Globals.dmtAddin.Application.GetNamespace("MAPI").GetItemFromID(oListItem.SubItems(4).Text)
-                'Save file
-                'change status
-                'add to tracking
+
+                If SaveFile(OneFileSelected, oListItem) Then
+
+                    ChangeStatus(oMail, oListItem)
+                    ColorListViewLine(oListItem)
+                    AddToTracking(oMail, OneFileSelected, oListItem)
+
+                End If
 
                 VerifyAttachmentsStatuses(oMail, oListItem.Text)
 
                 oListItem.Selected = False
+                oMail = Nothing
 
             Next
 
         End If
 
+        ListBoxDocumentTypes.SelectedIndex = -1
+
     End Sub
 
-    Private Function SaveFile(OneFileSelected As Boolean, listboxIndex As Long) As Boolean
+    Private Sub AddToTracking(oMail As MailItem, OneFileSelected As Boolean, oListItem As ListViewItem)
+        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=0;RetrieveIDS=Yes;DATABASE=" & My.Resources.DmtServerName & ";LIST={" & My.Resources.TrackingGUID & "};"
+        Dim insertQuery As String
+        Dim rowsAffected As Integer
+        Dim fileName As String
+
+        If OneFileSelected Then
+            fileName = txtFileName.Text
+        Else
+            fileName = oListItem.SubItems(1).Text
+        End If
+
+        insertQuery = "INSERT INTO [" & My.Resources.TrackingGUID & "] "
+        insertQuery += "([ConversationID], [DocName], [DocCategory], [CoCd], [Erp], [RecivedDate], [From], [DmtUserName], [Subject]) "
+        insertQuery += "VALUES('" & oMail.ConversationID & "','" & fileName & "','" & ListBoxDocumentTypes.SelectedItem & "', '"
+        insertQuery += ListBoxCoCds.SelectedItem & " ','" & ListBoxErps.SelectedValue & "','" & oMail.ReceivedTime.ToString("yyyy-MM-dd") & "', '"
+        insertQuery += oMail.SenderName & "','" & Globals.dmtAddin.Application.GetNamespace("MAPI").CurrentUser.AddressEntry.GetExchangeUser.PrimarySmtpAddress & "','" & oMail.Subject & "');"
+
+        Using SpConnection As New OleDbConnection(connString)
+            Using oCommand As New OleDbCommand()
+
+                oCommand.CommandText = insertQuery
+                oCommand.Connection = SpConnection
+
+                Try
+                    SpConnection.Open()
+                    rowsAffected = oCommand.ExecuteNonQuery()
+                Catch ex As OleDbException
+                    MessageBox.Show(ex.Message.ToString(), "Error Message")
+                End Try
+
+            End Using
+        End Using
+
+
+
+    End Sub
+
+    Private Sub ColorListViewLine(oListItem As ListViewItem)
+        oListItem.UseItemStyleForSubItems = True
+        oListItem.BackColor = Drawing.Color.YellowGreen
+    End Sub
+
+    Private Function SaveFile(OneFileSelected As Boolean, oListItem As ListViewItem) As Boolean
         Dim folderName As String
         'Dim destinationFolderPath As String
         Dim destinationFilePath As String
         Dim sourceFilePath As String
         Dim tempfileName As String
-
-        'TODO - skonczyc - zmienic listboxindex na nazwę kolejnej nazwy w listview
 
         folderName = ListBoxCoCds.SelectedItem.ToString & "_" & ListBoxDocumentTypes.SelectedItem.ToString
         'destinationFolderPath = Path.Combine(txtFolderPath.Text, folderName)
@@ -682,10 +737,31 @@ Public Class DmtFormMain
         If OneFileSelected Then
             destinationFilePath = Path.Combine({txtFolderPath.Text, folderName, txtFileName.Text & ".pdf"})
         Else
-            destinationFilePath = Path.Combine({txtFolderPath.Text, folderName, ListViewAttachments.sele})
+            destinationFilePath = Path.Combine({txtFolderPath.Text, folderName, oListItem.SubItems(1).Text})
         End If
 
+        tempfileName = oListItem.Text & "_" & oListItem.SubItems(3).Text & "_" & oListItem.SubItems(1).Text
+        sourceFilePath = Path.Combine(My.Resources.temporaryFolderPath, tempfileName)
+
+        If Not Directory.Exists(Path.Combine(txtFolderPath.Text, folderName)) Then
+            Directory.CreateDirectory(Path.Combine(txtFolderPath.Text, folderName))
+        End If
+
+        Try
+            File.Copy(sourceFilePath, destinationFilePath)
+            Return True
+        Catch ex As IOException
+            MessageBox.Show(ex.Message, "Cannot copy file", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return False
+        End Try
+
+
     End Function
+
+    Private Sub ChangeStatus(oMail As MailItem, oListItem As ListViewItem)
+        oListItem.SubItems(2).Text = dmtStatuses.Complete.ToString
+        setAttachmentStatusByIndex(oMail, oListItem.SubItems(3).Text, dmtStatuses.Complete)
+    End Sub
 
     Private Function checks() As Boolean
         Dim sMessage As String = vbNullString
