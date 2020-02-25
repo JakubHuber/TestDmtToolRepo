@@ -51,11 +51,10 @@ Partial Class DmtFormMain
         Me.ButtonOpenFolder = New System.Windows.Forms.Button()
         Me.txtFileName = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.pdfBox = New System.Windows.Forms.GroupBox()
-        Me.pdfViewer = New AxAcroPDFLib.AxAcroPDF()
+        Me.ListBoxPages = New System.Windows.Forms.ListBox()
+        Me.ButtonMovePage = New System.Windows.Forms.Button()
+        Me.pdfControl = New System.Windows.Forms.Panel()
         Me.ToolStripMain.SuspendLayout()
-        Me.pdfBox.SuspendLayout()
-        CType(Me.pdfViewer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ToolStripMain
@@ -63,7 +62,7 @@ Partial Class DmtFormMain
         Me.ToolStripMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonGetAttachment, Me.ToolStripSeparator1, Me.ToolStripButtonSaveAttachment, Me.ToolStripButtonSetSkip, Me.ToolStripSeparator2, Me.ToolStripDropDownButtonOptions, Me.ToolStripSeparator3, Me.ToolStripLabelMessages})
         Me.ToolStripMain.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripMain.Name = "ToolStripMain"
-        Me.ToolStripMain.Size = New System.Drawing.Size(1221, 25)
+        Me.ToolStripMain.Size = New System.Drawing.Size(1141, 25)
         Me.ToolStripMain.TabIndex = 0
         Me.ToolStripMain.Text = "ToolStrip1"
         '
@@ -275,27 +274,38 @@ Partial Class DmtFormMain
         Me.Label1.TabIndex = 9
         Me.Label1.Text = ".pdf"
         '
-        'pdfBox
+        'ListBoxPages
         '
-        Me.pdfBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.ListBoxPages.BackColor = System.Drawing.Color.FromArgb(CType(CType(93, Byte), Integer), CType(CType(83, Byte), Integer), CType(CType(94, Byte), Integer))
+        Me.ListBoxPages.ForeColor = System.Drawing.Color.White
+        Me.ListBoxPages.FormattingEnabled = True
+        Me.ListBoxPages.ItemHeight = 15
+        Me.ListBoxPages.Location = New System.Drawing.Point(721, 86)
+        Me.ListBoxPages.Name = "ListBoxPages"
+        Me.ListBoxPages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.ListBoxPages.Size = New System.Drawing.Size(39, 139)
+        Me.ListBoxPages.TabIndex = 11
+        '
+        'ButtonMovePage
+        '
+        Me.ButtonMovePage.BackColor = System.Drawing.Color.FromArgb(CType(CType(223, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(102, Byte), Integer))
+        Me.ButtonMovePage.Location = New System.Drawing.Point(766, 86)
+        Me.ButtonMovePage.Name = "ButtonMovePage"
+        Me.ButtonMovePage.Size = New System.Drawing.Size(85, 23)
+        Me.ButtonMovePage.TabIndex = 12
+        Me.ButtonMovePage.Text = "Move Page"
+        Me.ButtonMovePage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ButtonMovePage.UseVisualStyleBackColor = False
+        '
+        'pdfControl
+        '
+        Me.pdfControl.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pdfBox.Controls.Add(Me.pdfViewer)
-        Me.pdfBox.Location = New System.Drawing.Point(0, 218)
-        Me.pdfBox.Name = "pdfBox"
-        Me.pdfBox.Size = New System.Drawing.Size(1221, 343)
-        Me.pdfBox.TabIndex = 10
-        Me.pdfBox.TabStop = False
-        '
-        'pdfViewer
-        '
-        Me.pdfViewer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pdfViewer.Enabled = True
-        Me.pdfViewer.Location = New System.Drawing.Point(3, 19)
-        Me.pdfViewer.Name = "pdfViewer"
-        Me.pdfViewer.OcxState = CType(resources.GetObject("pdfViewer.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.pdfViewer.Size = New System.Drawing.Size(1215, 321)
-        Me.pdfViewer.TabIndex = 1
+        Me.pdfControl.Location = New System.Drawing.Point(0, 230)
+        Me.pdfControl.Name = "pdfControl"
+        Me.pdfControl.Size = New System.Drawing.Size(1139, 332)
+        Me.pdfControl.TabIndex = 13
         '
         'DmtFormMain
         '
@@ -303,32 +313,31 @@ Partial Class DmtFormMain
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(154, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(171, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1221, 561)
+        Me.ClientSize = New System.Drawing.Size(1141, 564)
+        Me.Controls.Add(Me.ToolStripMain)
+        Me.Controls.Add(Me.ListBoxCoCds)
+        Me.Controls.Add(Me.ListBoxErps)
+        Me.Controls.Add(Me.ButtonMovePage)
+        Me.Controls.Add(Me.ListBoxPages)
         Me.Controls.Add(Me.ButtonOpenFolder)
         Me.Controls.Add(Me.txtFileName)
         Me.Controls.Add(Me.txtFolderPath)
-        Me.Controls.Add(Me.ListBoxDocumentTypes)
-        Me.Controls.Add(Me.ListBoxCoCds)
-        Me.Controls.Add(Me.ListBoxErps)
-        Me.Controls.Add(Me.ListViewAttachments)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ToolStripMain)
-        Me.Controls.Add(Me.pdfBox)
+        Me.Controls.Add(Me.ListViewAttachments)
+        Me.Controls.Add(Me.ListBoxDocumentTypes)
+        Me.Controls.Add(Me.pdfControl)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.Name = "DmtFormMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "DmtFormMain"
         Me.ToolStripMain.ResumeLayout(False)
         Me.ToolStripMain.PerformLayout()
-        Me.pdfBox.ResumeLayout(False)
-        CType(Me.pdfViewer, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents ToolStripMain As Windows.Forms.ToolStrip
-    Friend WithEvents pdfViewer As AxAcroPDFLib.AxAcroPDF
     Friend WithEvents ToolStripButtonGetAttachment As Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSeparator1 As Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripButtonSaveAttachment As Windows.Forms.ToolStripButton
@@ -345,7 +354,6 @@ Partial Class DmtFormMain
     Friend WithEvents ButtonOpenFolder As Windows.Forms.Button
     Friend WithEvents txtFileName As Windows.Forms.TextBox
     Friend WithEvents Label1 As Windows.Forms.Label
-    Friend WithEvents pdfBox As Windows.Forms.GroupBox
     Friend WithEvents ToolStripMenuItemCenterFilter As Windows.Forms.ToolStripMenuItem
     Friend WithEvents MailNr As Windows.Forms.ColumnHeader
     Friend WithEvents AttachmentName As Windows.Forms.ColumnHeader
@@ -357,4 +365,7 @@ Partial Class DmtFormMain
     Friend WithEvents ToolStripSeparator5 As Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripMenuItemShowSuggestions As Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItemShowThumbs As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ListBoxPages As Windows.Forms.ListBox
+    Friend WithEvents ButtonMovePage As Windows.Forms.Button
+    Friend WithEvents pdfControl As Windows.Forms.Panel
 End Class

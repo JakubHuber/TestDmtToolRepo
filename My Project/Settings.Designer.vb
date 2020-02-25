@@ -89,10 +89,10 @@ Partial Friend NotInheritable Class MySettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property pdfFit() As String
+     Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+    Public Property pdfFit() As Integer
         Get
-            Return CType(Me("pdfFit"),String)
+            Return CType(Me("pdfFit"),Integer)
         End Get
         Set
             Me("pdfFit") = value
@@ -123,10 +123,10 @@ Partial Friend NotInheritable Class MySettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property pdfShowThumbs() As String
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+    Public Property pdfShowThumbs() As Integer
         Get
-            Return CType(Me("pdfShowThumbs"),String)
+            Return CType(Me("pdfShowThumbs"),Integer)
         End Get
         Set
             Me("pdfShowThumbs") = value

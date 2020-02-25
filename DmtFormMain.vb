@@ -37,6 +37,8 @@ Public Class DmtFormMain
     Dim regexPatternTotals As StringBuilder
     Dim regexPatternCreditNotes As StringBuilder
 
+    Dim pdfDoc As New AcroAVDoc
+
     Private Sub DmtFormMain_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         txtFolderPath.Text = My.Settings.saveFolderPath.ToString
@@ -45,8 +47,6 @@ Public Class DmtFormMain
         CheckCategories()
         RemoveAllPdfFiles()
         DownloadDataFromSP()
-        'TODO is it needed when tool starts?
-        'FillDocumentTypesComboBox()
         GetAllAttachments()
 
     End Sub
@@ -55,7 +55,7 @@ Public Class DmtFormMain
         Dim i As Long
         Dim oMail As MailItem
 
-        'ClosePreviousOpenedPdf()
+        ClosePreviousOpenedPdf()
         RemoveAllPdfFiles()
 
         If Not Globals.dmtAddin.Application.ActiveExplorer Is Nothing Then
@@ -190,7 +190,7 @@ Public Class DmtFormMain
             If IsMailCompleted Then
 
                 If mailCategories.IndexOf("Check_Dmt") > -1 Then
-                    mailCategories.Replace("Check_Dmt", "Completed_Dmt")
+                    mailCategories = mailCategories.Replace("Check_Dmt", "Completed_Dmt")
                 ElseIf mailCategories.IndexOf("Completed_Dmt") = -1 Then
                     mailCategories = mailCategories & ";Completed_Dmt"
                 End If
@@ -263,19 +263,22 @@ Public Class DmtFormMain
 
     End Function
 
-    'Private Sub ClosePreviousOpenedPdf()
+    Private Sub ClosePreviousOpenedPdf()
 
-    '    'If Not pdfDoc Is Nothing Then pdfDoc.Close()
+        If Not pdfDoc Is Nothing Then
+            Try
+                If pdfDoc.IsValid Then
+                    pdfDoc.Close(True)
+                End If
 
-    '    'TODO: need error handler?
-    '    'ErrHandler:
-    '    '        If Err.Number = 462 Then
-    '    '        Set pdfDoc = New AcroAVDoc
-    '    '        On Error GoTo 0
-    '    '            Resume
-    '    '        End If
+            Catch
+                pdfDoc = New AcroAVDoc
+            Finally
+                pdfDoc.Close(True)
+            End Try
+        End If
 
-    'End Sub
+    End Sub
 
     Private Sub ButtonOpenFolder_Click() Handles ButtonOpenFolder.Click
         Dim selectFolderDialog As New FolderBrowserDialog
@@ -304,8 +307,9 @@ Public Class DmtFormMain
         ToolStripMenuItemCenterFilter.Checked = My.Settings.centerFilter
         ToolStripMenuItemShowToolBar.Checked = My.Settings.pdfShowToolbar
         ToolStripMenuItemShowSuggestions.Checked = My.Settings.showSuggestions
+        ToolStripMenuItemShowThumbs.Checked = My.Settings.pdfShowThumbs
 
-        If My.Settings.pdfFit = "Fit" Then
+        If My.Settings.pdfFit = 1 Then
             ToolStripMenuItemFitPage.Checked = True
             ToolStripMenuItemFitWidth.Checked = False
         Else
@@ -497,6 +501,8 @@ Public Class DmtFormMain
     Private Sub RemoveAllPdfFiles()
         Dim oFile As String
 
+        Dim oProcess As System.Diagnostics.Process
+
         If Directory.Exists(My.Resources.temporaryFolderPath) Then
 
             For Each oFile In Directory.GetFiles(My.Resources.temporaryFolderPath)
@@ -504,16 +510,17 @@ Public Class DmtFormMain
                     File.Delete(oFile)
 
                 Catch ex As IOException
-                    MessageBox.Show(ex.Message)
-                    'NOTE - czy to potrzebne teraz?
 
-                    'killProcess "Acrobat.exe"
-                    'fso.DeleteFile temporaryFolderPath & "*.pdf", True
+                    For Each oProcess In System.Diagnostics.Process.GetProcessesByName("Acrobat")
+                        oProcess.Kill()
+                        oProcess.WaitForExit()
+                    Next
 
+                Finally
+                    File.Delete(oFile)
                 End Try
 
             Next
-
 
         End If
     End Sub
@@ -525,6 +532,16 @@ Public Class DmtFormMain
 
     Private Sub DmtFormMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         My.Settings.Save()
+
+        ClosePreviousOpenedPdf()
+
+        Try
+            pdfDoc.Close(True)
+        Finally
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(pdfDoc)
+            pdfDoc = Nothing
+        End Try
+
     End Sub
 
     Private Sub ToolStripButtonGetAttachment_Click(sender As Object, e As EventArgs) Handles ToolStripButtonGetAttachment.Click
@@ -546,6 +563,7 @@ Public Class DmtFormMain
         End If
 
     End Sub
+
     Private Sub setAttachmentStatusByIndex(ByRef oMail As MailItem, ByRef attachIndex As Long, ByRef newStatus As dmtStatuses)
         Dim oProperty As UserProperty
         Dim detailsText As String
@@ -576,26 +594,23 @@ Public Class DmtFormMain
             oMail.Save()
         End If
 
-        '    If Err.Number = -2147219956 Then
-        '        'BUG problem with users OST file
-        '        Debug.Print Err.Description
-        'Else
-        '        MsgBox Err.Description, vbInformation, Err.Number
-        'End If
-
     End Sub
 
     Private Sub ListViewAttachments_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListViewAttachments.SelectedIndexChanged
         Dim oListItem As ListViewItem
+        Dim sFileName As String
 
         ToolStripLabelMessages.Text = vbNullString
         ToolStripLabelMessages.BackColor = System.Drawing.Color.FromArgb(RGB(154, 158, 171))
 
         If ListViewAttachments.SelectedItems.Count > 0 Then
             oListItem = ListViewAttachments.SelectedItems(0)
+            sFileName = oListItem.Text & "_" & oListItem.SubItems(3).Text & "_" & oListItem.SubItems(1).Text
 
-            DisplayPdfInFrame(oListItem.Text & "_" & oListItem.SubItems(3).Text & "_" & oListItem.SubItems(1).Text)
+            DisplayPdfInFrame(sFileName)
+            DisplayPagesInListBox()
             txtFileName.Text = oListItem.SubItems(1).Text.Substring(0, oListItem.SubItems(1).Text.Length - 4)
+
             'TODO show sugestions
             If My.Settings.showSuggestions Then DisplaySuggestions()
 
@@ -604,12 +619,45 @@ Public Class DmtFormMain
 
     Private Sub DisplayPdfInFrame(fileName As String)
 
-        With pdfViewer
-            .LoadFile(Path.Combine(My.Resources.temporaryFolderPath, fileName))
-            .setShowToolbar(My.Settings.pdfShowToolbar)
-            .setView(My.Settings.pdfFit)
-            .setPageMode(My.Settings.pdfShowThumbs)
-        End With
+        Try
+
+            If pdfDoc.IsValid Then pdfDoc.Close(True)
+
+            If My.Settings.pdfFit = 1 Then
+                pdfDoc.OpenInWindowEx(Path.Combine(My.Resources.temporaryFolderPath, fileName), pdfControl.Handle, AVOpenParams.AV_DOC_VIEW, 1, 0, 0, AVZoomType.AVZoomFitPage, 0, 0, 0)
+            Else
+                pdfDoc.OpenInWindowEx(Path.Combine(My.Resources.temporaryFolderPath, fileName), pdfControl.Handle, AVOpenParams.AV_DOC_VIEW, 0, 0, 0, 0, 0, 0, 0)
+            End If
+
+            pdfDoc.SetViewMode(My.Settings.pdfShowThumbs)
+
+        Catch
+
+            pdfDoc = Nothing
+            pdfDoc = New AcroAVDoc
+
+        End Try
+
+    End Sub
+    Private Sub DisplayPagesInListBox()
+        Dim i As Integer
+        Dim activePdf As AcroPDDoc
+
+        ListBoxPages.Items.Clear()
+
+        Try
+            activePdf = pdfDoc.GetPDDoc
+
+            If Not activePdf Is Nothing Then
+                For i = 0 To activePdf.GetNumPages - 1
+                    ListBoxPages.Items.Add(i + 1)
+                Next
+            End If
+
+        Catch
+            ToolStripLabelMessages.Text = "Pdf err. Deselect and select attachment once again"
+        End Try
+
 
     End Sub
 
@@ -626,7 +674,7 @@ Public Class DmtFormMain
         ToolStripMenuItemFitWidth.Checked = False
         ToolStripMenuItemFitPage.Checked = True
 
-        My.Settings.pdfFit = "Fit"
+        My.Settings.pdfFit = 1
 
     End Sub
 
@@ -634,7 +682,7 @@ Public Class DmtFormMain
         ToolStripMenuItemFitPage.Checked = False
         ToolStripMenuItemFitWidth.Checked = True
 
-        My.Settings.pdfFit = "FitH"
+        My.Settings.pdfFit = 0
 
     End Sub
 
@@ -798,10 +846,71 @@ Public Class DmtFormMain
         ToolStripMenuItemShowThumbs.Checked = Not ToolStripMenuItemShowThumbs.Checked
 
         If ToolStripMenuItemShowThumbs.Checked Then
-            My.Settings.pdfShowThumbs = "thumbs"
+            My.Settings.pdfShowThumbs = 2
         Else
-            My.Settings.pdfShowThumbs = "none"
+            My.Settings.pdfShowThumbs = 0
         End If
     End Sub
 
+    Private Sub ButtonOpenFolder_Click(sender As Object, e As EventArgs) Handles ButtonOpenFolder.Click
+        Dim selectFolderDialog As New FolderBrowserDialog
+
+        With selectFolderDialog
+            .RootFolder = Environment.SpecialFolder.Desktop
+            .SelectedPath = My.Settings.saveFolderPath.ToString
+            If .ShowDialog = DialogResult.OK Then
+                My.Settings.saveFolderPath = .SelectedPath
+                txtFolderPath.Text = My.Settings.saveFolderPath
+            End If
+        End With
+
+    End Sub
+
+    Private Sub ButtonMovePage_Click(sender As Object, e As EventArgs) Handles ButtonMovePage.Click
+
+        Dim i As Integer
+        Dim counter As Integer = -1
+        Dim saveFileName As String
+        Dim oListItem As ListViewItem
+        Dim IsSaved As Boolean
+
+        If ListBoxPages.SelectedIndices.Count > 0 Then
+
+            oListItem = ListViewAttachments.SelectedItems(0)
+            saveFileName = oListItem.Text & "_" & oListItem.SubItems(3).Text & "_" & oListItem.SubItems(1).Text
+
+            For Each i In ListBoxPages.SelectedIndices
+
+                ' activePdf.MovePage(counter, i)
+                counter += 1
+                ListBoxPages.SetSelected(i, False)
+
+            Next
+
+            'IsSaved = activePdf.Save(PDSaveFlags.PDSaveFull, Path.Combine(My.Resources.temporaryFolderPath, saveFileName))
+
+            If IsSaved <> -1 Then
+
+                ToolStripLabelMessages.Text = "Acrobat does not support editing"
+                ToolStripLabelMessages.BackColor = Drawing.Color.Red
+
+            End If
+
+            ' activePdf.Close()
+            'System.Runtime.InteropServices.Marshal.ReleaseComObject(activePdf)
+
+            For Each oProcess In System.Diagnostics.Process.GetProcessesByName("Acrobat")
+                oProcess.Kill()
+                oProcess.WaitForExit()
+            Next
+
+            DisplayPdfInFrame(saveFileName)
+
+        End If
+
+    End Sub
+
+    'Private Sub DmtFormMain_ResizeEnd(sender As Object, e As EventArgs) Handles Me.ResizeEnd
+    '    pdfDoc.SetFrame(pdfContr)
+    'End Sub
 End Class

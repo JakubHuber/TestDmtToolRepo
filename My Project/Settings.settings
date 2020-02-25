@@ -11,8 +11,8 @@
     <Setting Name="pdfShowToolbar" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="pdfFit" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="pdfFit" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="showSuggestions" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)" />
@@ -20,8 +20,8 @@
     <Setting Name="selectSuggestions" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="pdfShowThumbs" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="pdfShowThumbs" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>
