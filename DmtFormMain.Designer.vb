@@ -54,14 +54,21 @@ Partial Class DmtFormMain
         Me.ListBoxPages = New System.Windows.Forms.ListBox()
         Me.ButtonMovePage = New System.Windows.Forms.Button()
         Me.pdfControl = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ToolStripDropDownButtonUsefullLinks = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripMenuItemSuggestionsSP = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EntitiesSPListToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CoCdsSPListToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMain.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStripMain
         '
-        Me.ToolStripMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonGetAttachment, Me.ToolStripSeparator1, Me.ToolStripButtonSaveAttachment, Me.ToolStripButtonSetSkip, Me.ToolStripSeparator2, Me.ToolStripDropDownButtonOptions, Me.ToolStripSeparator3, Me.ToolStripLabelMessages})
+        Me.ToolStripMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStripMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonGetAttachment, Me.ToolStripSeparator1, Me.ToolStripButtonSaveAttachment, Me.ToolStripButtonSetSkip, Me.ToolStripSeparator2, Me.ToolStripDropDownButtonOptions, Me.ToolStripSeparator3, Me.ToolStripDropDownButtonUsefullLinks, Me.ToolStripLabelMessages})
         Me.ToolStripMain.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripMain.Name = "ToolStripMain"
+        Me.ToolStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.ToolStripMain.Size = New System.Drawing.Size(1141, 25)
         Me.ToolStripMain.TabIndex = 0
         Me.ToolStripMain.Text = "ToolStrip1"
@@ -117,47 +124,48 @@ Partial Class DmtFormMain
         'ToolStripMenuItemCenterFilter
         '
         Me.ToolStripMenuItemCenterFilter.Name = "ToolStripMenuItemCenterFilter"
-        Me.ToolStripMenuItemCenterFilter.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItemCenterFilter.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItemCenterFilter.Text = "Filter CoCds"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(173, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(177, 6)
         '
         'ToolStripMenuItemShowToolBar
         '
+        Me.ToolStripMenuItemShowToolBar.Enabled = False
         Me.ToolStripMenuItemShowToolBar.Name = "ToolStripMenuItemShowToolBar"
-        Me.ToolStripMenuItemShowToolBar.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItemShowToolBar.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItemShowToolBar.Text = "Pdf - show toolbar"
         '
         'ToolStripMenuItemFitPage
         '
         Me.ToolStripMenuItemFitPage.Name = "ToolStripMenuItemFitPage"
-        Me.ToolStripMenuItemFitPage.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItemFitPage.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItemFitPage.Text = "Pdf - fit page"
         '
         'ToolStripMenuItemFitWidth
         '
         Me.ToolStripMenuItemFitWidth.Name = "ToolStripMenuItemFitWidth"
-        Me.ToolStripMenuItemFitWidth.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItemFitWidth.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItemFitWidth.Text = "Pdf - fit width"
         '
         'ToolStripMenuItemShowThumbs
         '
         Me.ToolStripMenuItemShowThumbs.Name = "ToolStripMenuItemShowThumbs"
-        Me.ToolStripMenuItemShowThumbs.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItemShowThumbs.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItemShowThumbs.Text = "Pdf - Show thumbs"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(173, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(177, 6)
         '
         'ToolStripMenuItemShowSuggestions
         '
         Me.ToolStripMenuItemShowSuggestions.Name = "ToolStripMenuItemShowSuggestions"
-        Me.ToolStripMenuItemShowSuggestions.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItemShowSuggestions.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItemShowSuggestions.Text = "Show suggestions"
         '
         'ToolStripSeparator3
@@ -168,10 +176,17 @@ Partial Class DmtFormMain
         'ToolStripLabelMessages
         '
         Me.ToolStripLabelMessages.AutoSize = False
+        Me.ToolStripLabelMessages.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ToolStripLabelMessages.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ToolStripLabelMessages.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.ToolStripLabelMessages.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.ToolStripLabelMessages.ForeColor = System.Drawing.Color.SeaGreen
+        Me.ToolStripLabelMessages.ImageTransparentColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ToolStripLabelMessages.Name = "ToolStripLabelMessages"
-        Me.ToolStripLabelMessages.Size = New System.Drawing.Size(200, 22)
+        Me.ToolStripLabelMessages.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never
+        Me.ToolStripLabelMessages.Size = New System.Drawing.Size(400, 22)
         Me.ToolStripLabelMessages.Text = "System messages"
+        Me.ToolStripLabelMessages.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage
         '
         'ListViewAttachments
         '
@@ -195,12 +210,12 @@ Partial Class DmtFormMain
         'AttachmentName
         '
         Me.AttachmentName.Text = "AttchName"
-        Me.AttachmentName.Width = 275
+        Me.AttachmentName.Width = 265
         '
         'Status
         '
         Me.Status.Text = "Status"
-        Me.Status.Width = 70
+        Me.Status.Width = 80
         '
         'ListBoxErps
         '
@@ -283,7 +298,7 @@ Partial Class DmtFormMain
         Me.ListBoxPages.Location = New System.Drawing.Point(721, 86)
         Me.ListBoxPages.Name = "ListBoxPages"
         Me.ListBoxPages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBoxPages.Size = New System.Drawing.Size(39, 139)
+        Me.ListBoxPages.Size = New System.Drawing.Size(46, 139)
         Me.ListBoxPages.TabIndex = 11
         '
         'ButtonMovePage
@@ -307,6 +322,50 @@ Partial Class DmtFormMain
         Me.pdfControl.Size = New System.Drawing.Size(1139, 332)
         Me.pdfControl.TabIndex = 13
         '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.FromArgb(CType(CType(223, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(102, Byte), Integer))
+        Me.Button1.Location = New System.Drawing.Point(766, 115)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(85, 23)
+        Me.Button1.TabIndex = 14
+        Me.Button1.Text = "Save pdf"
+        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button1.UseVisualStyleBackColor = False
+        '
+        'ToolStripDropDownButtonUsefullLinks
+        '
+        Me.ToolStripDropDownButtonUsefullLinks.BackColor = System.Drawing.Color.FromArgb(CType(CType(223, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(102, Byte), Integer))
+        Me.ToolStripDropDownButtonUsefullLinks.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemSuggestionsSP, Me.EntitiesSPListToolStripMenuItem, Me.CoCdsSPListToolStripMenuItem})
+        Me.ToolStripDropDownButtonUsefullLinks.Image = CType(resources.GetObject("ToolStripDropDownButtonUsefullLinks.Image"), System.Drawing.Image)
+        Me.ToolStripDropDownButtonUsefullLinks.ImageTransparentColor = System.Drawing.Color.White
+        Me.ToolStripDropDownButtonUsefullLinks.Name = "ToolStripDropDownButtonUsefullLinks"
+        Me.ToolStripDropDownButtonUsefullLinks.Size = New System.Drawing.Size(99, 22)
+        Me.ToolStripDropDownButtonUsefullLinks.Text = "Usefull links"
+        '
+        'ToolStripMenuItemSuggestionsSP
+        '
+        Me.ToolStripMenuItemSuggestionsSP.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.ToolStripMenuItemSuggestionsSP.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.ToolStripMenuItemSuggestionsSP.ForeColor = System.Drawing.SystemColors.HotTrack
+        Me.ToolStripMenuItemSuggestionsSP.Name = "ToolStripMenuItemSuggestionsSP"
+        Me.ToolStripMenuItemSuggestionsSP.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItemSuggestionsSP.Text = "Suggestions SP list"
+        '
+        'EntitiesSPListToolStripMenuItem
+        '
+        Me.EntitiesSPListToolStripMenuItem.ForeColor = System.Drawing.SystemColors.HotTrack
+        Me.EntitiesSPListToolStripMenuItem.Name = "EntitiesSPListToolStripMenuItem"
+        Me.EntitiesSPListToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.EntitiesSPListToolStripMenuItem.Text = "Entities SP list"
+        '
+        'CoCdsSPListToolStripMenuItem
+        '
+        Me.CoCdsSPListToolStripMenuItem.ForeColor = System.Drawing.SystemColors.HotTrack
+        Me.CoCdsSPListToolStripMenuItem.Name = "CoCdsSPListToolStripMenuItem"
+        Me.CoCdsSPListToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CoCdsSPListToolStripMenuItem.Text = "CoCds SP list"
+        '
         'DmtFormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -314,6 +373,7 @@ Partial Class DmtFormMain
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(154, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(171, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1141, 564)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.ToolStripMain)
         Me.Controls.Add(Me.ListBoxCoCds)
         Me.Controls.Add(Me.ListBoxErps)
@@ -330,6 +390,7 @@ Partial Class DmtFormMain
         Me.Name = "DmtFormMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "DmtFormMain"
+        Me.TopMost = True
         Me.ToolStripMain.ResumeLayout(False)
         Me.ToolStripMain.PerformLayout()
         Me.ResumeLayout(False)
@@ -368,4 +429,9 @@ Partial Class DmtFormMain
     Friend WithEvents ListBoxPages As Windows.Forms.ListBox
     Friend WithEvents ButtonMovePage As Windows.Forms.Button
     Friend WithEvents pdfControl As Windows.Forms.Panel
+    Friend WithEvents Button1 As Windows.Forms.Button
+    Friend WithEvents ToolStripDropDownButtonUsefullLinks As Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents ToolStripMenuItemSuggestionsSP As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EntitiesSPListToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CoCdsSPListToolStripMenuItem As Windows.Forms.ToolStripMenuItem
 End Class

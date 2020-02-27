@@ -34,7 +34,7 @@
     <PublishUrl>C:\Users\jakub.huber\OneDrive - Shell\Automation\DMT tool\DmtVS\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.6</ApplicationVersion>
+    <ApplicationVersion>1.0.0.8</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>

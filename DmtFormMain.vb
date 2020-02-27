@@ -342,6 +342,8 @@ Public Class DmtFormMain
         ToolStripDropDownButtonOptions.Image = Drawing.Image.FromHbitmap(vPicture.Handle, vPicture.hPal)
         vPicture = Globals.dmtAddin.Application.ActiveExplorer.CommandBars.GetImageMso("Folder", 16, 16)
         ButtonOpenFolder.Image = Drawing.Image.FromHbitmap(vPicture.Handle, vPicture.hPal)
+        vPicture = Globals.dmtAddin.Application.ActiveExplorer.CommandBars.GetImageMso("FileLinksToFiles", 16, 16)
+        ToolStripDropDownButtonUsefullLinks.Image = Drawing.Image.FromHbitmap(vPicture.Handle, vPicture.hPal)
 
     End Sub
 
@@ -601,9 +603,9 @@ Public Class DmtFormMain
         Dim sFileName As String
 
         ToolStripLabelMessages.Text = vbNullString
-        ToolStripLabelMessages.BackColor = System.Drawing.Color.FromArgb(RGB(154, 158, 171))
+        ToolStripLabelMessages.ForeColor = System.Drawing.Color.SeaGreen
 
-        If ListViewAttachments.SelectedItems.Count > 0 Then
+        If ListViewAttachments.SelectedItems.Count = 1 Then
             oListItem = ListViewAttachments.SelectedItems(0)
             sFileName = oListItem.Text & "_" & oListItem.SubItems(3).Text & "_" & oListItem.SubItems(1).Text
 
@@ -656,6 +658,7 @@ Public Class DmtFormMain
 
         Catch
             ToolStripLabelMessages.Text = "Pdf err. Deselect and select attachment once again"
+            ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
         End Try
 
 
@@ -697,7 +700,7 @@ Public Class DmtFormMain
         Dim OneFileSelected As Boolean
 
         ToolStripLabelMessages.Text = vbNullString
-        ToolStripLabelMessages.BackColor = System.Drawing.Color.FromArgb(RGB(154, 158, 171))
+        ToolStripLabelMessages.ForeColor = System.Drawing.Color.SeaGreen
 
         If checks() Then
 
@@ -867,12 +870,14 @@ Public Class DmtFormMain
     End Sub
 
     Private Sub ButtonMovePage_Click(sender As Object, e As EventArgs) Handles ButtonMovePage.Click
-
+        Dim activePdf As AcroPDDoc
         Dim i As Integer
         Dim counter As Integer = -1
         Dim saveFileName As String
         Dim oListItem As ListViewItem
         Dim IsSaved As Boolean
+
+        activePdf = pdfDoc.GetPDDoc
 
         If ListBoxPages.SelectedIndices.Count > 0 Then
 
@@ -881,36 +886,75 @@ Public Class DmtFormMain
 
             For Each i In ListBoxPages.SelectedIndices
 
-                ' activePdf.MovePage(counter, i)
+                activePdf.MovePage(counter, i)
                 counter += 1
-                ListBoxPages.SetSelected(i, False)
+                'ListBoxPages.SetSelected(i, False)
 
             Next
 
-            'IsSaved = activePdf.Save(PDSaveFlags.PDSaveFull, Path.Combine(My.Resources.temporaryFolderPath, saveFileName))
+            IsSaved = activePdf.Save(PDSaveFlags.PDSaveFull, Path.Combine(My.Resources.temporaryFolderPath, saveFileName))
 
             If IsSaved <> -1 Then
 
                 ToolStripLabelMessages.Text = "Acrobat does not support editing"
-                ToolStripLabelMessages.BackColor = Drawing.Color.Red
+                ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
 
             End If
-
-            ' activePdf.Close()
-            'System.Runtime.InteropServices.Marshal.ReleaseComObject(activePdf)
-
-            For Each oProcess In System.Diagnostics.Process.GetProcessesByName("Acrobat")
-                oProcess.Kill()
-                oProcess.WaitForExit()
-            Next
-
-            DisplayPdfInFrame(saveFileName)
 
         End If
 
     End Sub
 
-    'Private Sub DmtFormMain_ResizeEnd(sender As Object, e As EventArgs) Handles Me.ResizeEnd
-    '    pdfDoc.SetFrame(pdfContr)
-    'End Sub
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim activePdf As AcroPDDoc
+        Dim oListItem As ListViewItem
+        Dim saveFileName As String
+        Dim IsSaved As Boolean
+
+        activePdf = pdfDoc.GetPDDoc
+
+        If ListViewAttachments.SelectedItems.Count = 1 Then
+
+            oListItem = ListViewAttachments.SelectedItems(0)
+            saveFileName = oListItem.Text & "_" & oListItem.SubItems(3).Text & "_" & oListItem.SubItems(1).Text
+
+            IsSaved = activePdf.Save(PDSaveFlags.PDSaveFull, Path.Combine(My.Resources.temporaryFolderPath, saveFileName))
+            If IsSaved <> -1 Then
+
+                ToolStripLabelMessages.Text = "Acrobat does not support editing"
+                ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
+
+            End If
+        Else
+
+            ToolStripLabelMessages.Text = "To save select only one item"
+            ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
+
+        End If
+
+    End Sub
+
+    Private Sub ToolStripMenuItemSuggestionsSP_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSuggestionsSP.Click
+        Try
+            System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/dmtHelper/AllItems.aspx")
+        Catch
+
+        End Try
+    End Sub
+
+    Private Sub EntitiesSPListToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EntitiesSPListToolStripMenuItem.Click
+        Try
+            System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/DmtEntities/AllItems.aspx")
+        Catch
+
+        End Try
+    End Sub
+
+    Private Sub CoCdsSPListToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CoCdsSPListToolStripMenuItem.Click
+        Try
+            System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/DmtCoCd/AllItems.aspx")
+        Catch
+
+        End Try
+    End Sub
 End Class
