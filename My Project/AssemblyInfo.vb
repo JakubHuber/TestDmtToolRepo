@@ -9,10 +9,10 @@ Imports System.Security
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Dmt tool")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("Dmt tool")> 
+<Assembly: AssemblyTitle("Dmt tool")>
+<Assembly: AssemblyDescription("Sorting pdfs tool")>
+<Assembly: AssemblyCompany("Shell")>
+<Assembly: AssemblyProduct("Dmt tool - Jakub Huber")>
 <Assembly: AssemblyCopyright("Copyright ©  2020")> 
 <Assembly: AssemblyTrademark("")> 
 

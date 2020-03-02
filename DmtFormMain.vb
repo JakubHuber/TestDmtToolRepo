@@ -6,7 +6,7 @@ Imports System.Data
 Imports System.ComponentModel
 Imports Acrobat
 
-Enum dmtDocTypes
+Enum DmtDocTypes
     ZMMINVOICE = 1
     ZMMCREDNOTE = 2
     ZMMURGTINV = 3
@@ -24,10 +24,16 @@ Enum dmtDocTypes
     IG_NON_PO_INVOICE_FI = 15
 End Enum
 
-Public Enum dmtStatuses
+Public Enum DmtStatuses
     Complete = 0
     Check = 1
     Skip = 2
+End Enum
+
+Public Enum DmtDocStatuses
+    Undefined = 0
+    Invoice = 1
+    CreditNote = 2
 End Enum
 
 Public Class DmtFormMain
@@ -130,37 +136,48 @@ Public Class DmtFormMain
         Dim attachmentSaveName As String
         Dim olistItem As ListViewItem
         Dim attachmentStatus As dmtStatuses
+        Dim tempFolderCreated As Boolean = True
 
         If Not Directory.Exists(My.Resources.temporaryFolderPath) Then
-            Directory.CreateDirectory(My.Resources.temporaryFolderPath)
+            Try
+                Directory.CreateDirectory(My.Resources.temporaryFolderPath)
+            Catch exAccess As UnauthorizedAccessException
+                tempFolderCreated = False
+                MessageBox.Show("Cannot find C:\App folder. Please create it manually before you run program.", "Temporary path error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+            End Try
+
         End If
 
-        For Each oAttachment In oMail.Attachments
+        If tempFolderCreated Then
 
-            If oAttachment.Type = OlAttachmentType.olByValue Then
+            For Each oAttachment In oMail.Attachments
 
-                If oAttachment.FileName.Substring(oAttachment.FileName.Length - 4, 4).ToLower = ".pdf" Then
+                If oAttachment.Type = OlAttachmentType.olByValue Then
 
-                    attachmentSaveName = mailNumber & "_" & oAttachment.Index & "_" & oAttachment.FileName
+                    If oAttachment.FileName.Substring(oAttachment.FileName.Length - 4, 4).ToLower = ".pdf" Then
 
-                    oAttachment.SaveAsFile(Path.Combine(My.Resources.temporaryFolderPath, attachmentSaveName))
+                        attachmentSaveName = mailNumber & "_" & oAttachment.Index & "_" & oAttachment.FileName
 
-                    olistItem = New ListViewItem(mailNumber.ToString)
-                    olistItem.SubItems.Add(oAttachment.FileName.ToString)
+                        oAttachment.SaveAsFile(Path.Combine(My.Resources.temporaryFolderPath, attachmentSaveName))
 
-                    attachmentStatus = DirectCast(getAttachmentStatusByIndex(oAttachment.Index, oMail), dmtStatuses)
-                    olistItem.SubItems.Add(attachmentStatus.ToString)
-                    If attachmentStatus = dmtStatuses.Complete Then ColorListViewLine(olistItem)
+                        olistItem = New ListViewItem(mailNumber.ToString)
+                        olistItem.SubItems.Add(oAttachment.FileName.ToString)
 
-                    olistItem.SubItems.Add(oAttachment.Index.ToString)
-                    olistItem.SubItems.Add(oMail.EntryID.ToString)
+                        attachmentStatus = DirectCast(getAttachmentStatusByIndex(oAttachment.Index, oMail), dmtStatuses)
+                        olistItem.SubItems.Add(attachmentStatus.ToString)
+                        If attachmentStatus = dmtStatuses.Complete Then ColorListViewLine(olistItem)
 
-                    ListViewAttachments.Items.Add(olistItem)
+                        olistItem.SubItems.Add(oAttachment.Index.ToString)
+                        olistItem.SubItems.Add(oMail.EntryID.ToString)
+
+                        ListViewAttachments.Items.Add(olistItem)
 
                     End If
 
                 End If
-        Next
+            Next
+
+        End If
 
     End Sub
 
@@ -308,6 +325,9 @@ Public Class DmtFormMain
         ToolStripMenuItemShowToolBar.Checked = My.Settings.pdfShowToolbar
         ToolStripMenuItemShowSuggestions.Checked = My.Settings.showSuggestions
         ToolStripMenuItemShowThumbs.Checked = My.Settings.pdfShowThumbs
+        ToolStripMenuItemTopWindow.Checked = My.Settings.topWindow
+
+        Me.TopMost = My.Settings.topWindow
 
         If My.Settings.pdfFit = 1 Then
             ToolStripMenuItemFitPage.Checked = True
@@ -566,7 +586,7 @@ Public Class DmtFormMain
 
     End Sub
 
-    Private Sub setAttachmentStatusByIndex(ByRef oMail As MailItem, ByRef attachIndex As Long, ByRef newStatus As dmtStatuses)
+    Private Sub SetAttachmentStatusByIndex(ByRef oMail As MailItem, ByRef attachIndex As Long, ByRef newStatus As dmtStatuses)
         Dim oProperty As UserProperty
         Dim detailsText As String
         Dim vTemp() As String
@@ -613,7 +633,6 @@ Public Class DmtFormMain
             DisplayPagesInListBox()
             txtFileName.Text = oListItem.SubItems(1).Text.Substring(0, oListItem.SubItems(1).Text.Length - 4)
 
-            'TODO show sugestions
             If My.Settings.showSuggestions Then DisplaySuggestions()
 
         End If
@@ -665,7 +684,69 @@ Public Class DmtFormMain
     End Sub
 
     Private Sub DisplaySuggestions()
-        'Dim pdfDoc As AcroPDDoc
+        Dim extractorClass As PdfExtractor
+        Dim shellEntity As Entity
+
+        'Try
+        If Not pdfDoc.GetPDDoc Is Nothing Then
+
+                LabelEntity.Text = vbNullString
+                extractorClass = New PdfExtractor
+
+                With extractorClass
+
+                    If Not pdfDoc Is Nothing Then
+                        .ExtractAllText(pdfDoc.GetPDDoc)
+
+                        If Not .IsScan Then
+
+                            .totalPattern = regexPatternTotals.ToString
+                            .creditNotePattern = regexPatternCreditNotes.ToString
+
+                            shellEntity = .findEntity(DmtDataSet.Tables("Entities").Rows)
+
+                            If Not shellEntity Is Nothing Then
+
+                                LabelEntity.Text = shellEntity.EntityName & " " & shellEntity.CoCd
+                                'TODO - select entity
+                                'If selectSuggestions = True Then SelectCoCd shellEntity.CoCd
+
+                            End If
+
+                            LabelScan.Visible = False
+                            'TODO
+                            LabelPo.Text = "PO: " & .findPoNumber
+                            'LabelTotal.Text = "Total: " & .findTotal & " IsInvoice: " & docStatusToString(.IsInvoice)
+
+                            If ListBoxErps.SelectedIndex > -1 Then
+                                'TODO
+                                'LabelDocType.Text = "Doc type: " & .guessDocType(ListBoxErps.List(ListBoxErps.listIndex))
+                                'If My.Settings.selectSuggestions Then SelectCategory.guessDocType(ListBoxErps.List(ListBoxErps.listIndex))
+                            End If
+
+                        Else
+
+                            LabelEntity.Text = vbNullString
+                            LabelPo.Text = "PO: "
+                            LabelTotal.Text = "Total: "
+                            LabelDocType.Text = "Doc type: "
+                            LabelScan.Visible = True
+
+                        End If
+
+                    End If
+
+                End With
+
+            End If
+
+        'Catch
+
+        'ToolStripLabelMessages.Text = "The remote server machine is unavailable"
+        '    ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
+
+        'End Try
+
     End Sub
 
     Private Sub ToolStripMenuItemShowToolBar_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemShowToolBar.Click
@@ -814,7 +895,7 @@ Public Class DmtFormMain
         setAttachmentStatusByIndex(oMail, oListItem.SubItems(3).Text, dmtStatuses.Complete)
     End Sub
 
-    Private Function checks() As Boolean
+    Private Function Checks() As Boolean
         Dim sMessage As String = vbNullString
         Dim vChecks As Boolean = True
 
@@ -956,5 +1037,10 @@ Public Class DmtFormMain
         Catch
 
         End Try
+    End Sub
+
+    Private Sub ToolStripMenuItemTopWindow_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemTopWindow.Click
+        ToolStripMenuItemTopWindow.Checked = Not ToolStripMenuItemTopWindow.Checked
+        My.Settings.topWindow = ToolStripMenuItemTopWindow.Checked
     End Sub
 End Class

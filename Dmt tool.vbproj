@@ -34,7 +34,7 @@
     <PublishUrl>C:\Users\jakub.huber\OneDrive - Shell\Automation\DMT tool\DmtVS\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.8</ApplicationVersion>
+    <ApplicationVersion>1.0.0.11</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>
@@ -215,6 +215,8 @@
     <Compile Include="DmtFormMain.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Entity.vb" />
+    <Compile Include="PdfExtractor.vb" />
     <Compile Include="RibbonDmt.Designer.vb">
       <DependentUpon>RibbonDmt.vb</DependentUpon>
     </Compile>
