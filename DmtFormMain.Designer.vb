@@ -66,6 +66,8 @@ Partial Class DmtFormMain
         Me.LabelTotal = New System.Windows.Forms.Label()
         Me.LabelPo = New System.Windows.Forms.Label()
         Me.LabelScan = New System.Windows.Forms.Label()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripMenuItemSelectSuggestions = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMain.SuspendLayout()
         Me.GroupBoxSuggestions.SuspendLayout()
         Me.SuspendLayout()
@@ -122,7 +124,7 @@ Partial Class DmtFormMain
         'ToolStripDropDownButtonOptions
         '
         Me.ToolStripDropDownButtonOptions.BackColor = System.Drawing.Color.FromArgb(CType(CType(223, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(102, Byte), Integer))
-        Me.ToolStripDropDownButtonOptions.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemCenterFilter, Me.ToolStripSeparator4, Me.ToolStripMenuItemShowToolBar, Me.ToolStripMenuItemFitPage, Me.ToolStripMenuItemFitWidth, Me.ToolStripMenuItemShowThumbs, Me.ToolStripSeparator5, Me.ToolStripMenuItemShowSuggestions, Me.ToolStripMenuItemTopWindow})
+        Me.ToolStripDropDownButtonOptions.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemCenterFilter, Me.ToolStripSeparator4, Me.ToolStripMenuItemShowToolBar, Me.ToolStripMenuItemFitPage, Me.ToolStripMenuItemFitWidth, Me.ToolStripMenuItemShowThumbs, Me.ToolStripSeparator5, Me.ToolStripMenuItemShowSuggestions, Me.ToolStripMenuItemSelectSuggestions, Me.ToolStripSeparator6, Me.ToolStripMenuItemTopWindow})
         Me.ToolStripDropDownButtonOptions.Image = CType(resources.GetObject("ToolStripDropDownButtonOptions.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButtonOptions.ImageTransparentColor = System.Drawing.Color.White
         Me.ToolStripDropDownButtonOptions.Name = "ToolStripDropDownButtonOptions"
@@ -398,9 +400,9 @@ Partial Class DmtFormMain
         Me.LabelEntity.BackColor = System.Drawing.Color.FromArgb(CType(CType(93, Byte), Integer), CType(CType(83, Byte), Integer), CType(CType(94, Byte), Integer))
         Me.LabelEntity.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.LabelEntity.ForeColor = System.Drawing.Color.White
-        Me.LabelEntity.Location = New System.Drawing.Point(175, 19)
+        Me.LabelEntity.Location = New System.Drawing.Point(6, 74)
         Me.LabelEntity.Name = "LabelEntity"
-        Me.LabelEntity.Size = New System.Drawing.Size(185, 87)
+        Me.LabelEntity.Size = New System.Drawing.Size(354, 32)
         Me.LabelEntity.TabIndex = 3
         Me.LabelEntity.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -409,9 +411,9 @@ Partial Class DmtFormMain
         Me.LabelDocType.BackColor = System.Drawing.Color.FromArgb(CType(CType(93, Byte), Integer), CType(CType(83, Byte), Integer), CType(CType(94, Byte), Integer))
         Me.LabelDocType.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.LabelDocType.ForeColor = System.Drawing.Color.White
-        Me.LabelDocType.Location = New System.Drawing.Point(6, 62)
+        Me.LabelDocType.Location = New System.Drawing.Point(166, 19)
         Me.LabelDocType.Name = "LabelDocType"
-        Me.LabelDocType.Size = New System.Drawing.Size(163, 44)
+        Me.LabelDocType.Size = New System.Drawing.Size(194, 24)
         Me.LabelDocType.TabIndex = 2
         Me.LabelDocType.Text = "DocType:"
         Me.LabelDocType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -420,9 +422,9 @@ Partial Class DmtFormMain
         '
         Me.LabelTotal.BackColor = System.Drawing.Color.FromArgb(CType(CType(93, Byte), Integer), CType(CType(83, Byte), Integer), CType(CType(94, Byte), Integer))
         Me.LabelTotal.ForeColor = System.Drawing.Color.White
-        Me.LabelTotal.Location = New System.Drawing.Point(6, 43)
+        Me.LabelTotal.Location = New System.Drawing.Point(6, 46)
         Me.LabelTotal.Name = "LabelTotal"
-        Me.LabelTotal.Size = New System.Drawing.Size(163, 19)
+        Me.LabelTotal.Size = New System.Drawing.Size(354, 24)
         Me.LabelTotal.TabIndex = 1
         Me.LabelTotal.Text = "Total:"
         Me.LabelTotal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -440,7 +442,6 @@ Partial Class DmtFormMain
         '
         'LabelScan
         '
-        Me.LabelScan.AutoSize = True
         Me.LabelScan.BackColor = System.Drawing.Color.Coral
         Me.LabelScan.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.LabelScan.ForeColor = System.Drawing.Color.White
@@ -450,6 +451,17 @@ Partial Class DmtFormMain
         Me.LabelScan.TabIndex = 16
         Me.LabelScan.Text = "SCAN"
         Me.LabelScan.Visible = False
+        '
+        'ToolStripSeparator6
+        '
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(180, 6)
+        '
+        'ToolStripMenuItemSelectSuggestions
+        '
+        Me.ToolStripMenuItemSelectSuggestions.Name = "ToolStripMenuItemSelectSuggestions"
+        Me.ToolStripMenuItemSelectSuggestions.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemSelectSuggestions.Text = "Select suggestions"
         '
         'DmtFormMain
         '
@@ -529,4 +541,6 @@ Partial Class DmtFormMain
     Friend WithEvents LabelPo As Windows.Forms.Label
     Friend WithEvents LabelEntity As Windows.Forms.Label
     Friend WithEvents LabelScan As Windows.Forms.Label
+    Friend WithEvents ToolStripMenuItemSelectSuggestions As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator6 As Windows.Forms.ToolStripSeparator
 End Class

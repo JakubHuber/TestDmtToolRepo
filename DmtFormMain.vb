@@ -557,6 +557,8 @@ Public Class DmtFormMain
 
         ClosePreviousOpenedPdf()
 
+        RemoveAllPdfFiles()
+
         Try
             pdfDoc.Close(True)
         Finally
@@ -690,55 +692,62 @@ Public Class DmtFormMain
         'Try
         If Not pdfDoc.GetPDDoc Is Nothing Then
 
-                LabelEntity.Text = vbNullString
-                extractorClass = New PdfExtractor
+            LabelEntity.Text = vbNullString
+            extractorClass = New PdfExtractor
 
-                With extractorClass
+            With extractorClass
 
-                    If Not pdfDoc Is Nothing Then
-                        .ExtractAllText(pdfDoc.GetPDDoc)
+                If Not pdfDoc Is Nothing Then
+                    .ExtractAllText(pdfDoc.GetPDDoc)
 
-                        If Not .IsScan Then
+                    If Not .IsScan Then
 
-                            .totalPattern = regexPatternTotals.ToString
-                            .creditNotePattern = regexPatternCreditNotes.ToString
+                        .totalPattern = regexPatternTotals.ToString
+                        .creditNotePattern = regexPatternCreditNotes.ToString
 
-                            shellEntity = .findEntity(DmtDataSet.Tables("Entities").Rows)
+                        shellEntity = .findEntity(DmtDataSet.Tables("Entities").Rows)
 
-                            If Not shellEntity Is Nothing Then
+                        If Not shellEntity Is Nothing Then
 
-                                LabelEntity.Text = shellEntity.EntityName & " " & shellEntity.CoCd
-                                'TODO - select entity
-                                'If selectSuggestions = True Then SelectCoCd shellEntity.CoCd
-
+                            LabelEntity.Text = shellEntity.EntityName & " " & shellEntity.CoCd
+                            If My.Settings.selectSuggestions Then
+                                SelectCoCd(shellEntity.CoCd)
                             End If
-
-                            LabelScan.Visible = False
-                            'TODO
-                            LabelPo.Text = "PO: " & .findPoNumber
-                            'LabelTotal.Text = "Total: " & .findTotal & " IsInvoice: " & docStatusToString(.IsInvoice)
-
-                            If ListBoxErps.SelectedIndex > -1 Then
-                                'TODO
-                                'LabelDocType.Text = "Doc type: " & .guessDocType(ListBoxErps.List(ListBoxErps.listIndex))
-                                'If My.Settings.selectSuggestions Then SelectCategory.guessDocType(ListBoxErps.List(ListBoxErps.listIndex))
-                            End If
-
-                        Else
-
-                            LabelEntity.Text = vbNullString
-                            LabelPo.Text = "PO: "
-                            LabelTotal.Text = "Total: "
-                            LabelDocType.Text = "Doc type: "
-                            LabelScan.Visible = True
 
                         End If
 
+                        LabelScan.Visible = False
+                        LabelPo.Text = "PO: " & .findPoNumber
+                        LabelTotal.Text = "Total: " & .findTotal & " IsInvoice: " & .IsInvoice.ToString
+
+
+                        If ListBoxErps.SelectedIndex > -1 Then
+
+                            LabelDocType.Text = "Doc type: " & .guessDocType(ListBoxErps.SelectedValue)
+                            If My.Settings.selectSuggestions Then
+                                SelectCategory(.guessDocType(ListBoxErps.SelectedValue))
+                            End If
+
+                        End If
+
+                    Else
+
+                        LabelEntity.Text = vbNullString
+                        LabelPo.Text = "PO: "
+                        LabelTotal.Text = "Total: "
+                        LabelDocType.Text = "Doc type: "
+                        LabelScan.Visible = True
+
+                        If ListBoxDocumentTypes.SelectedIndex > -1 Then ListBoxDocumentTypes.ClearSelected()
+                        'If ListBoxCoCds.SelectedIndex > -1 Then ListBoxCoCds.SelectedIndex = False
+
                     End If
 
-                End With
+                End If
 
-            End If
+            End With
+
+        End If
 
         'Catch
 
@@ -749,6 +758,26 @@ Public Class DmtFormMain
 
     End Sub
 
+    Private Sub SelectCoCd(ByRef CoCdName As String)
+        Dim CoCdTable As DataTable
+        Dim oRows As DataRow()
+
+        CoCdTable = DmtDataSet.Tables("CoCds")
+        oRows = CoCdTable.Select("CoCd ='" & CoCdName & "'")
+
+        ListBoxErps.SelectedValue = oRows(0)(0)
+        'TODO Make item selected! - TEST!
+        ListBoxCoCds.SelectedItem = CoCdName
+
+
+    End Sub
+
+    Private Sub SelectCategory(ByRef categoryName As String)
+
+        ListBoxDocumentTypes.ClearSelected()
+        ListBoxDocumentTypes.SelectedIndex = ListBoxDocumentTypes.FindStringExact(categoryName)
+
+    End Sub
     Private Sub ToolStripMenuItemShowToolBar_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemShowToolBar.Click
         ToolStripMenuItemShowToolBar.Checked = Not ToolStripMenuItemShowToolBar.Checked
         My.Settings.pdfShowToolbar = ToolStripMenuItemShowToolBar.Checked
@@ -846,8 +875,6 @@ Public Class DmtFormMain
 
             End Using
         End Using
-
-
 
     End Sub
 
@@ -1042,5 +1069,13 @@ Public Class DmtFormMain
     Private Sub ToolStripMenuItemTopWindow_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemTopWindow.Click
         ToolStripMenuItemTopWindow.Checked = Not ToolStripMenuItemTopWindow.Checked
         My.Settings.topWindow = ToolStripMenuItemTopWindow.Checked
+    End Sub
+
+    Private Sub ToolStripMenuItemSelectSuggestions_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSelectSuggestions.Click
+        If ToolStripMenuItemShowSuggestions.Checked Then
+            ToolStripMenuItemSelectSuggestions.Enabled = True
+            ToolStripMenuItemSelectSuggestions.Checked = Not ToolStripMenuItemSelectSuggestions.Checked
+            My.Settings.selectSuggestions = ToolStripMenuItemSelectSuggestions.Checked
+        End If
     End Sub
 End Class

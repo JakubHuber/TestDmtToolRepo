@@ -14,7 +14,7 @@ Public Class PdfExtractor
     Dim docTotal As Double
     Public IsUrgent As Boolean
     Public IsScan As Boolean
-    Public IsInvoice As dmtStatuses
+    Public IsInvoice As DmtDocStatuses
     Public docCurrency As String
 
     Public totalPattern As String
@@ -67,8 +67,8 @@ Public Class PdfExtractor
         Dim oHilite As AcroHiliteList
         Dim oPage As AcroPDPage
         Dim oSelectedText As AcroPDTextSelect
-        Dim i As Long
-        Dim j As Long
+        Dim i As Integer
+        Dim j As Integer
 
         opdf = vPdf
         oHilite = New AcroHiliteList
@@ -114,6 +114,114 @@ Public Class PdfExtractor
 
     End Function
 
+    Public Function findTotal() As String
+        Dim vTotal As String
+
+        vTotal = findTotalInArray(totalPattern)
+        If vTotal = vbNullString Then
+
+            vTotal = getPattern(textNoSpecialChars, totalPattern)
+
+        End If
+
+        If vTotal <> vbNullString Then
+            docTotal = textCurrencyToDouble(vTotal)
+        End If
+
+        If docTotal > 0 Then IsInvoice = getDocumentStatusByWords()
+
+        Return docTotal
+
+    End Function
+
+    Private Function findTotalInArray(ByRef sPattern As String) As String
+        Dim i As Long
+        Dim totalFound As String = vbNullString
+
+        oRegEx = New Regex(sPattern, RegexOptions.IgnoreCase)
+
+        If textLines.Length > 0 Then
+
+            For i = 0 To UBound(textLines)
+
+                If oRegEx.IsMatch(textLines(i)) Then
+                    totalFound = oRegEx.Match(textLines(i)).Value.ToString
+                    Exit For
+                End If
+
+            Next
+
+        End If
+
+        Return totalFound
+
+    End Function
+
+    Private Function getDocumentStatusByWords() As DmtDocStatuses
+        oRegEx = New Regex(creditNotePattern, RegexOptions.IgnoreCase)
+
+        If oRegEx.IsMatch(textNoSpecialChars) Then
+            Return DmtDocStatuses.CreditNote
+        Else
+            Return DmtDocStatuses.Invoice
+        End If
+
+    End Function
+
+    Public Function textCurrencyToDouble(ByRef currencyValue As String) As Double
+        Dim decimalPlaces As Integer
+        Dim cleanNumber As Double
+        Dim IsNegative As Boolean
+        Dim oMatch As Match
+        Dim decimalSeparator As String
+
+        'Leave only total part
+        oRegEx = New Regex("([-+(]?\d+(.*?)[^\d\s][\d),.-]+)", RegexOptions.IgnoreCase)
+        oMatch = oRegEx.Match(currencyValue)
+        currencyValue = oMatch.Value
+        'Check +/-
+        If currencyValue.Substring(currencyValue.Length - 1, 1) = "-" Or currencyValue.Substring(currencyValue.Length - 1, 1) = "(" Then IsNegative = True
+        'Get decimal separator
+        decimalSeparator = getDecimalPlaceSeparator(currencyValue)
+        'Get decimal places
+        oRegEx = New Regex("\" & decimalSeparator & "(\d+)", RegexOptions.IgnoreCase)
+        oMatch = oRegEx.Match(currencyValue)
+        If oMatch.Success Then decimalPlaces = oMatch.Length - 1
+        'Remove all dots, comas
+        If currencyValue <> vbNullString Then
+            oRegEx = New Regex("[^0-9]", RegexOptions.IgnoreCase)
+            cleanNumber = (oRegEx.Replace(currencyValue, String.Empty)) / 10 ^ decimalPlaces
+
+            If IsNegative Then
+                cleanNumber = -1 * cleanNumber
+                IsInvoice = DmtDocStatuses.CreditNote
+            Else
+                IsInvoice = DmtDocStatuses.Invoice
+            End If
+
+            Return cleanNumber
+
+        Else
+            Return 0
+        End If
+
+    End Function
+
+    Private Function getDecimalPlaceSeparator(value As String) As String
+        Dim comaPosition As Integer = -1
+        Dim dotPosition As Integer = -1
+
+        comaPosition = value.Length - value.IndexOf(",")
+        comaPosition = value.Length - value.IndexOf(".")
+
+        If comaPosition < dotPosition Then
+            Return ","
+        Else
+            Return "."
+        End If
+
+    End Function
+
     Public Function getPattern(ByRef sText As String, ByRef sPattern As String) As String
         Dim oMatch As Match
 
@@ -122,6 +230,51 @@ Public Class PdfExtractor
         If oMatch.Success Then
             Return oMatch.Value.ToString
         End If
+
+    End Function
+
+    Function guessDocType(erpValue As String) As String
+        Dim guess As String = vbNullString
+
+        If POnumber <> vbNullString And IsInvoice = DmtDocStatuses.Invoice Then
+
+            Select Case erpValue
+                Case "P16", "P94"
+                    guess = DmtDocTypes.TP_PO_INVOICE_LIV.ToString
+                Case "P49", "P53"
+                    guess = DmtDocTypes.ZMMINVOICE.ToString
+            End Select
+
+        ElseIf POnumber <> vbNullString And IsInvoice = DmtDocStatuses.CreditNote Then
+
+            Select Case erpValue
+                Case "P16", "P94"
+                    guess = DmtDocTypes.TP_PO_CREDITNOTE_LIV.ToString
+                Case "P49", "P53"
+                    guess = DmtDocTypes.ZMMCREDNOTE.ToString
+            End Select
+
+        ElseIf POnumber = vbNullString And IsInvoice = DmtDocStatuses.Invoice Then
+
+            Select Case erpValue
+                Case "P16", "P94"
+                    guess = DmtDocTypes.TP_NON_PO_INVOICE_FI.ToString
+                Case "P49", "P53"
+                    guess = DmtDocTypes.ZFIINVOICE.ToString
+            End Select
+
+        ElseIf POnumber = vbNullString And IsInvoice = DmtDocStatuses.CreditNote Then
+
+            Select Case erpValue
+                Case "P16", "P94"
+                    guess = DmtDocTypes.TP_NON_PO_CREDITNOTE_FI.ToString
+                Case "P49", "P53"
+                    guess = DmtDocTypes.ZFICREDNOTE
+            End Select
+
+        End If
+
+        Return guess
 
     End Function
 
