@@ -22,7 +22,7 @@ Imports System.Security
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("3002590d-684b-4785-835c-f3bda0562480")> 
+<Assembly: Guid("3002590d-684b-4785-835c-f3bda0562480")>
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -35,7 +35,7 @@ Imports System.Security
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("1.1.0.0")>
 <Assembly: AssemblyFileVersion("1.0.0.0")> 
 
 Friend Module DesignTimeConstants

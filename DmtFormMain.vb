@@ -5,6 +5,7 @@ Imports System.Data.OleDb
 Imports System.Data
 Imports System.ComponentModel
 Imports Acrobat
+Imports System.Deployment.Application
 
 Enum DmtDocTypes
     ZMMINVOICE = 1
@@ -47,7 +48,16 @@ Public Class DmtFormMain
 
     Private Sub DmtFormMain_Load(sender As Object, e As EventArgs) Handles Me.Load
 
+        If ApplicationDeployment.IsNetworkDeployed Then
+            Me.Text += " " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
+        End If
+
         txtFolderPath.Text = My.Settings.saveFolderPath.ToString
+
+        For Each oProcess In System.Diagnostics.Process.GetProcessesByName("Acrobat")
+            oProcess.Kill()
+            oProcess.WaitForExit()
+        Next
 
         SetUpTool()
         CheckCategories()
@@ -552,22 +562,6 @@ Public Class DmtFormMain
         My.Settings.centerFilter = ToolStripMenuItemCenterFilter.Checked
     End Sub
 
-    Private Sub DmtFormMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        My.Settings.Save()
-
-        ClosePreviousOpenedPdf()
-
-        RemoveAllPdfFiles()
-
-        Try
-            pdfDoc.Close(True)
-        Finally
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(pdfDoc)
-            pdfDoc = Nothing
-        End Try
-
-    End Sub
-
     Private Sub ToolStripButtonGetAttachment_Click(sender As Object, e As EventArgs) Handles ToolStripButtonGetAttachment.Click
         GetAllAttachments()
     End Sub
@@ -689,72 +683,72 @@ Public Class DmtFormMain
         Dim extractorClass As PdfExtractor
         Dim shellEntity As Entity
 
-        'Try
-        If Not pdfDoc.GetPDDoc Is Nothing Then
+        Try
+            If Not pdfDoc.GetPDDoc Is Nothing Then
 
-            LabelEntity.Text = vbNullString
-            extractorClass = New PdfExtractor
+                LabelEntity.Text = vbNullString
+                extractorClass = New PdfExtractor
 
-            With extractorClass
+                With extractorClass
 
-                If Not pdfDoc Is Nothing Then
-                    .ExtractAllText(pdfDoc.GetPDDoc)
+                    If Not pdfDoc Is Nothing Then
+                        .ExtractAllText(pdfDoc.GetPDDoc)
 
-                    If Not .IsScan Then
+                        If Not .IsScan Then
 
-                        .totalPattern = regexPatternTotals.ToString
-                        .creditNotePattern = regexPatternCreditNotes.ToString
+                            .totalPattern = regexPatternTotals.ToString
+                            .creditNotePattern = regexPatternCreditNotes.ToString
 
-                        shellEntity = .findEntity(DmtDataSet.Tables("Entities").Rows)
+                            shellEntity = .findEntity(DmtDataSet.Tables("Entities").Rows)
 
-                        If Not shellEntity Is Nothing Then
+                            If Not shellEntity Is Nothing Then
 
-                            LabelEntity.Text = shellEntity.EntityName & " " & shellEntity.CoCd
-                            If My.Settings.selectSuggestions Then
-                                SelectCoCd(shellEntity.CoCd)
+                                LabelEntity.Text = shellEntity.EntityName & " " & shellEntity.CoCd
+                                If My.Settings.selectSuggestions Then
+                                    SelectCoCd(shellEntity.CoCd)
+                                End If
+
                             End If
 
-                        End If
-
-                        LabelScan.Visible = False
-                        LabelPo.Text = "PO: " & .findPoNumber
-                        LabelTotal.Text = "Total: " & .findTotal & " IsInvoice: " & .IsInvoice.ToString
+                            LabelScan.Visible = False
+                            LabelPo.Text = "PO: " & .findPoNumber
+                            LabelTotal.Text = "Total: " & .findTotal & " IsInvoice: " & .IsInvoice.ToString
 
 
-                        If ListBoxErps.SelectedIndex > -1 Then
+                            If ListBoxErps.SelectedIndex > -1 Then
 
-                            LabelDocType.Text = "Doc type: " & .guessDocType(ListBoxErps.SelectedValue)
-                            If My.Settings.selectSuggestions Then
-                                SelectCategory(.guessDocType(ListBoxErps.SelectedValue))
+                                LabelDocType.Text = "Doc type: " & .guessDocType(ListBoxErps.SelectedValue)
+                                If My.Settings.selectSuggestions Then
+                                    SelectCategory(.guessDocType(ListBoxErps.SelectedValue))
+                                End If
+
                             End If
 
+                        Else
+
+                            LabelEntity.Text = vbNullString
+                            LabelPo.Text = "PO: "
+                            LabelTotal.Text = "Total: "
+                            LabelDocType.Text = "Doc type: "
+                            LabelScan.Visible = True
+
+                            If ListBoxDocumentTypes.SelectedIndex > -1 Then ListBoxDocumentTypes.ClearSelected()
+                            'If ListBoxCoCds.SelectedIndex > -1 Then ListBoxCoCds.SelectedIndex = False
+
                         End If
-
-                    Else
-
-                        LabelEntity.Text = vbNullString
-                        LabelPo.Text = "PO: "
-                        LabelTotal.Text = "Total: "
-                        LabelDocType.Text = "Doc type: "
-                        LabelScan.Visible = True
-
-                        If ListBoxDocumentTypes.SelectedIndex > -1 Then ListBoxDocumentTypes.ClearSelected()
-                        'If ListBoxCoCds.SelectedIndex > -1 Then ListBoxCoCds.SelectedIndex = False
 
                     End If
 
-                End If
+                End With
 
-            End With
+            End If
 
-        End If
+        Catch
 
-        'Catch
+            ToolStripLabelMessages.Text = "The remote server machine is unavailable"
+            ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
 
-        'ToolStripLabelMessages.Text = "The remote server machine is unavailable"
-        '    ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
-
-        'End Try
+        End Try
 
     End Sub
 
@@ -766,7 +760,6 @@ Public Class DmtFormMain
         oRows = CoCdTable.Select("CoCd ='" & CoCdName & "'")
 
         ListBoxErps.SelectedValue = oRows(0)(0)
-        'TODO Make item selected! - TEST!
         ListBoxCoCds.SelectedItem = CoCdName
 
 
@@ -880,7 +873,7 @@ Public Class DmtFormMain
 
     Private Sub ColorListViewLine(oListItem As ListViewItem)
         oListItem.UseItemStyleForSubItems = True
-        oListItem.BackColor = Drawing.Color.YellowGreen
+        oListItem.BackColor = Drawing.Color.DarkGreen
     End Sub
 
     Private Function SaveFile(OneFileSelected As Boolean, oListItem As ListViewItem) As Boolean
@@ -1077,5 +1070,20 @@ Public Class DmtFormMain
             ToolStripMenuItemSelectSuggestions.Checked = Not ToolStripMenuItemSelectSuggestions.Checked
             My.Settings.selectSuggestions = ToolStripMenuItemSelectSuggestions.Checked
         End If
+    End Sub
+
+    Private Sub DmtFormMain_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        My.Settings.Save()
+
+        ClosePreviousOpenedPdf()
+
+        'RemoveAllPdfFiles()
+
+        Try
+            pdfDoc.Close(True)
+        Finally
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(pdfDoc)
+            pdfDoc = Nothing
+        End Try
     End Sub
 End Class

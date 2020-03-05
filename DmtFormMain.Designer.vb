@@ -38,6 +38,8 @@ Partial Class DmtFormMain
         Me.ToolStripMenuItemShowThumbs = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItemShowSuggestions = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItemSelectSuggestions = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItemTopWindow = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripDropDownButtonUsefullLinks = New System.Windows.Forms.ToolStripDropDownButton()
@@ -66,8 +68,6 @@ Partial Class DmtFormMain
         Me.LabelTotal = New System.Windows.Forms.Label()
         Me.LabelPo = New System.Windows.Forms.Label()
         Me.LabelScan = New System.Windows.Forms.Label()
-        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripMenuItemSelectSuggestions = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMain.SuspendLayout()
         Me.GroupBoxSuggestions.SuspendLayout()
         Me.SuspendLayout()
@@ -177,6 +177,17 @@ Partial Class DmtFormMain
         Me.ToolStripMenuItemShowSuggestions.Name = "ToolStripMenuItemShowSuggestions"
         Me.ToolStripMenuItemShowSuggestions.Size = New System.Drawing.Size(183, 22)
         Me.ToolStripMenuItemShowSuggestions.Text = "Show suggestions"
+        '
+        'ToolStripMenuItemSelectSuggestions
+        '
+        Me.ToolStripMenuItemSelectSuggestions.Name = "ToolStripMenuItemSelectSuggestions"
+        Me.ToolStripMenuItemSelectSuggestions.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemSelectSuggestions.Text = "Select suggestions"
+        '
+        'ToolStripSeparator6
+        '
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(180, 6)
         '
         'ToolStripMenuItemTopWindow
         '
@@ -411,9 +422,9 @@ Partial Class DmtFormMain
         Me.LabelDocType.BackColor = System.Drawing.Color.FromArgb(CType(CType(93, Byte), Integer), CType(CType(83, Byte), Integer), CType(CType(94, Byte), Integer))
         Me.LabelDocType.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.LabelDocType.ForeColor = System.Drawing.Color.White
-        Me.LabelDocType.Location = New System.Drawing.Point(166, 19)
+        Me.LabelDocType.Location = New System.Drawing.Point(131, 19)
         Me.LabelDocType.Name = "LabelDocType"
-        Me.LabelDocType.Size = New System.Drawing.Size(194, 24)
+        Me.LabelDocType.Size = New System.Drawing.Size(229, 24)
         Me.LabelDocType.TabIndex = 2
         Me.LabelDocType.Text = "DocType:"
         Me.LabelDocType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -435,7 +446,7 @@ Partial Class DmtFormMain
         Me.LabelPo.ForeColor = System.Drawing.Color.White
         Me.LabelPo.Location = New System.Drawing.Point(6, 19)
         Me.LabelPo.Name = "LabelPo"
-        Me.LabelPo.Size = New System.Drawing.Size(163, 24)
+        Me.LabelPo.Size = New System.Drawing.Size(119, 24)
         Me.LabelPo.TabIndex = 0
         Me.LabelPo.Text = "PO:"
         Me.LabelPo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -451,17 +462,6 @@ Partial Class DmtFormMain
         Me.LabelScan.TabIndex = 16
         Me.LabelScan.Text = "SCAN"
         Me.LabelScan.Visible = False
-        '
-        'ToolStripSeparator6
-        '
-        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(180, 6)
-        '
-        'ToolStripMenuItemSelectSuggestions
-        '
-        Me.ToolStripMenuItemSelectSuggestions.Name = "ToolStripMenuItemSelectSuggestions"
-        Me.ToolStripMenuItemSelectSuggestions.Size = New System.Drawing.Size(183, 22)
-        Me.ToolStripMenuItemSelectSuggestions.Text = "Select suggestions"
         '
         'DmtFormMain
         '
