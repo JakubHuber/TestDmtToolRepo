@@ -54,10 +54,10 @@ Public Class DmtFormMain
 
         txtFolderPath.Text = My.Settings.saveFolderPath.ToString
 
-        For Each oProcess In System.Diagnostics.Process.GetProcessesByName("Acrobat")
-            oProcess.Kill()
-            oProcess.WaitForExit()
-        Next
+        'For Each oProcess In System.Diagnostics.Process.GetProcessesByName("Acrobat")
+        '    oProcess.Kill()
+        '    oProcess.WaitForExit()
+        'Next
 
         SetUpTool()
         CheckCategories()
@@ -291,18 +291,32 @@ Public Class DmtFormMain
     End Function
 
     Private Sub ClosePreviousOpenedPdf()
+        Dim acrobatProcess As New AcroApp
+        Dim numberOfActivePdfs As Integer = acrobatProcess.GetNumAVDocs
+        Dim i As Integer
 
-        If Not pdfDoc Is Nothing Then
-            Try
-                If pdfDoc.IsValid Then
-                    pdfDoc.Close(True)
+        If numberOfActivePdfs > 0 Then
+
+            For i = 0 To numberOfActivePdfs - 1
+
+                pdfDoc = acrobatProcess.GetAVDoc(i)
+
+                If Not pdfDoc Is Nothing Then
+                    Try
+
+                        If pdfDoc.IsValid Then
+                            pdfDoc.Close(True)
+                        End If
+
+                    Catch comEx As System.Runtime.InteropServices.COMException
+                        pdfDoc = New AcroAVDoc
+                    Finally
+                        pdfDoc.Close(True)
+                    End Try
                 End If
 
-            Catch
-                pdfDoc = New AcroAVDoc
-            Finally
-                pdfDoc.Close(True)
-            End Try
+            Next
+
         End If
 
     End Sub
@@ -648,7 +662,7 @@ Public Class DmtFormMain
 
             pdfDoc.SetViewMode(My.Settings.pdfShowThumbs)
 
-        Catch
+        Catch comEx As System.Runtime.InteropServices.COMException
 
             pdfDoc = Nothing
             pdfDoc = New AcroAVDoc
@@ -671,9 +685,11 @@ Public Class DmtFormMain
                 Next
             End If
 
-        Catch
+        Catch comEx As System.Runtime.InteropServices.COMException
+
             ToolStripLabelMessages.Text = "Pdf err. Deselect and select attachment once again"
             ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
+
         End Try
 
 
@@ -743,7 +759,7 @@ Public Class DmtFormMain
 
             End If
 
-        Catch
+        Catch comEx As System.Runtime.InteropServices.COMException
 
             ToolStripLabelMessages.Text = "The remote server machine is unavailable"
             ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
@@ -1085,5 +1101,21 @@ Public Class DmtFormMain
             System.Runtime.InteropServices.Marshal.ReleaseComObject(pdfDoc)
             pdfDoc = Nothing
         End Try
+    End Sub
+
+    Private Sub DmtFormMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        Dim sFileName As String
+        Dim oListItem As ListViewItem
+
+        If Me.WindowState <> FormWindowState.Minimized Then
+
+            If ListViewAttachments.SelectedItems.Count = 1 Then
+
+                oListItem = ListViewAttachments.SelectedItems(0)
+                sFileName = oListItem.Text & "_" & oListItem.SubItems(3).Text & "_" & oListItem.SubItems(1).Text
+                DisplayPdfInFrame(sFileName)
+
+            End If
+        End If
     End Sub
 End Class
