@@ -2,6 +2,8 @@
 
 Public Class RibbonDmt
 
+
+
     Private Sub RibbonDmt_Load(ByVal sender As System.Object, ByVal e As RibbonUIEventArgs) Handles MyBase.Load
 
     End Sub
@@ -9,7 +11,8 @@ Public Class RibbonDmt
     Private Sub ButtonDmt_Click(sender As Object, e As RibbonControlEventArgs) Handles ButtonDmt.Click
         Dim oDmtFormMain As New DmtFormMain
 
-        oDmtFormMain.Show()
-
+        If Not Globals.dmtAddin.FormLoaded Then
+            oDmtFormMain.Show()
+        End If
     End Sub
 End Class

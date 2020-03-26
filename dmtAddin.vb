@@ -1,4 +1,7 @@
 ﻿Public Class dmtAddin
+
+    Public FormLoaded As Boolean
+
     Private Sub ThisAddIn_Startup() Handles Me.Startup
 
     End Sub

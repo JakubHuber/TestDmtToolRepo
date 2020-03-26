@@ -7,6 +7,7 @@ Imports System.ComponentModel
 Imports Acrobat
 Imports System.Deployment.Application
 
+
 Enum DmtDocTypes
     ZMMINVOICE = 1
     ZMMCREDNOTE = 2
@@ -23,6 +24,9 @@ Enum DmtDocTypes
     TP_NON_PO_CREDITNOTE_FI = 13
     IG_PO_INVOICE_LIV = 14
     IG_NON_PO_INVOICE_FI = 15
+    MM_PO_INVOICES = 16
+    FI_NON_PO_INVOICES = 17
+    CN_AVOIR
 End Enum
 
 Public Enum DmtStatuses
@@ -47,6 +51,8 @@ Public Class DmtFormMain
     Dim pdfDoc As New AcroAVDoc
 
     Private Sub DmtFormMain_Load(sender As Object, e As EventArgs) Handles Me.Load
+
+        Globals.dmtAddin.FormLoaded = True
 
         If ApplicationDeployment.IsNetworkDeployed Then
             Me.Text += " " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
@@ -348,6 +354,7 @@ Public Class DmtFormMain
         ToolStripMenuItemCenterFilter.Checked = My.Settings.centerFilter
         ToolStripMenuItemShowToolBar.Checked = My.Settings.pdfShowToolbar
         ToolStripMenuItemShowSuggestions.Checked = My.Settings.showSuggestions
+        ToolStripMenuItemSelectSuggestions.Checked = My.Settings.selectSuggestions
         ToolStripMenuItemShowThumbs.Checked = My.Settings.pdfShowThumbs
         ToolStripMenuItemTopWindow.Checked = My.Settings.topWindow
 
@@ -503,6 +510,12 @@ Public Class DmtFormMain
                     .Add(dmtDocTypes.ZFICRNTIG.ToString)
                     .Add(dmtDocTypes.ZFIINVIG.ToString)
                     .Add(dmtDocTypes.ZFIURGIGIN.ToString)
+                End With
+            Case "P42"
+                With ListBoxDocumentTypes.Items
+                    .Add(DmtDocTypes.MM_PO_INVOICES.ToString)
+                    .Add(DmtDocTypes.FI_NON_PO_INVOICES.ToString)
+                    .Add(DmtDocTypes.CN_AVOIR.ToString)
                 End With
         End Select
 
@@ -840,7 +853,7 @@ Public Class DmtFormMain
 
                 VerifyAttachmentsStatuses(oMail, oListItem.Text)
 
-                oListItem.Selected = False
+                'oListItem.Selected = False
                 oMail = Nothing
 
             Next
@@ -1083,8 +1096,11 @@ Public Class DmtFormMain
     Private Sub ToolStripMenuItemSelectSuggestions_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSelectSuggestions.Click
         If ToolStripMenuItemShowSuggestions.Checked Then
             ToolStripMenuItemSelectSuggestions.Enabled = True
-            ToolStripMenuItemSelectSuggestions.Checked = Not ToolStripMenuItemSelectSuggestions.Checked
+            ToolStripMenuItemSelectSuggestions.Checked = ToolStripMenuItemSelectSuggestions.Checked
             My.Settings.selectSuggestions = ToolStripMenuItemSelectSuggestions.Checked
+        Else
+            ToolStripMenuItemSelectSuggestions.Enabled = False
+            ToolStripMenuItemSelectSuggestions.Checked = False
         End If
     End Sub
 
@@ -1101,6 +1117,8 @@ Public Class DmtFormMain
             System.Runtime.InteropServices.Marshal.ReleaseComObject(pdfDoc)
             pdfDoc = Nothing
         End Try
+
+        Globals.dmtAddin.FormLoaded = False
     End Sub
 
     Private Sub DmtFormMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize

@@ -34,7 +34,7 @@
     <PublishUrl>\\eu001-sp.shell.com\sites\AAAAA4854\GlobalProjects\TMToolkit\myRTV\Global-RTV-Repository\Shared Documents\DmtPublishTest\</PublishUrl>
     <InstallUrl>//eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Shared%2520Documents/DmtPublishTest/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.24</ApplicationVersion>
+    <ApplicationVersion>1.0.1.27</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>
@@ -136,6 +136,9 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -259,6 +262,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Acrobat">
