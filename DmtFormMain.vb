@@ -6,7 +6,7 @@ Imports System.Data
 Imports System.ComponentModel
 Imports Acrobat
 Imports System.Deployment.Application
-
+Imports Newtonsoft.Json
 
 Enum DmtDocTypes
     ZMMINVOICE = 1
@@ -50,6 +50,8 @@ Public Class DmtFormMain
 
     Dim pdfDoc As New AcroAVDoc
 
+    Dim oSpConn As Connection
+
     Private Sub DmtFormMain_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         Globals.dmtAddin.FormLoaded = True
@@ -57,6 +59,8 @@ Public Class DmtFormMain
         If ApplicationDeployment.IsNetworkDeployed Then
             Me.Text += " " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
         End If
+
+        SetupConnection()
 
         txtFolderPath.Text = My.Settings.saveFolderPath.ToString
 
@@ -70,6 +74,23 @@ Public Class DmtFormMain
         RemoveAllPdfFiles()
         DownloadDataFromSP()
         GetAllAttachments()
+
+    End Sub
+
+    Private Sub SetupConnection()
+        Dim oConn As Connection
+
+        Dim oSpConnections As RootObject = JsonConvert.DeserializeObject(Of RootObject)(My.Resources.jsonConnections)
+
+        For Each oConn In oSpConnections.Connection
+            If oConn.Name = My.Settings.connName Then
+
+                oSpConn = oConn
+                Exit For
+
+            End If
+        Next
+
 
     End Sub
 

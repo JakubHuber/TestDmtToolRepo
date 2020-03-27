@@ -10,6 +10,12 @@ Public Class RibbonDmt
 
     Private Sub ButtonDmt_Click(sender As Object, e As RibbonControlEventArgs) Handles ButtonDmt.Click
         Dim oDmtFormMain As New DmtFormMain
+        Dim oSpConnectionsForm As New FormSpConnections
+
+        If My.Settings.firstRun Then
+            oSpConnectionsForm.ShowDialog()
+        End If
+
 
         If Not Globals.dmtAddin.FormLoaded Then
             oDmtFormMain.Show()

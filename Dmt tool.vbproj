@@ -220,6 +220,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Entity.vb" />
+    <Compile Include="FormSpConnections.Designer.vb">
+      <DependentUpon>FormSpConnections.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormSpConnections.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JsonHelperClasses.vb" />
     <Compile Include="PdfExtractor.vb" />
     <Compile Include="RibbonDmt.Designer.vb">
       <DependentUpon>RibbonDmt.vb</DependentUpon>
@@ -229,6 +236,9 @@
     </Compile>
     <EmbeddedResource Include="DmtFormMain.resx">
       <DependentUpon>DmtFormMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSpConnections.resx">
+      <DependentUpon>FormSpConnections.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RibbonDmt.resx">
       <DependentUpon>RibbonDmt.vb</DependentUpon>
