@@ -420,7 +420,7 @@ Public Class DmtFormMain
     End Sub
 
     Private Sub GetDataFromCoCd()
-        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & My.Resources.DmtServerName & ";LIST={" & My.Resources.CoCdGUID & "};"
+        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & oSpConn.DmtServerName & ";LIST={" & oSpConn.CoCdGUID & "};"
         Dim SpConnection As New OleDbConnection(connString)
         Dim oCommand As New OleDbCommand()
         Dim oAdapter As New OleDbDataAdapter
@@ -434,41 +434,54 @@ Public Class DmtFormMain
             oCommand.CommandText = "SELECT [ERP], [CoCd], [CenterFilter] FROM [DmtCoCd]"
         End If
 
-        oAdapter.SelectCommand = oCommand
-        oAdapter.Fill(DmtDataSet, "CoCds")
+        Try
+            oAdapter.SelectCommand = oCommand
+            oAdapter.Fill(DmtDataSet, "CoCds")
 
-        oCommand.CommandText = "SELECT DISTINCT [ERP] FROM [DmtCoCd]"
-        oAdapter.Fill(DmtDataSet, "Erps")
+            oCommand.CommandText = "SELECT DISTINCT [ERP] FROM [DmtCoCd]"
+            oAdapter.Fill(DmtDataSet, "Erps")
 
-        ListBoxErps.ValueMember = "ERP"
-        ListBoxErps.DisplayMember = "ERP"
-        ListBoxErps.DataSource = DmtDataSet.Tables("Erps")
+            ListBoxErps.ValueMember = "ERP"
+            ListBoxErps.DisplayMember = "ERP"
+            ListBoxErps.DataSource = DmtDataSet.Tables("Erps")
+        Catch ex As OleDbException
+            MessageBox.Show(ex.Message)
+        End Try
 
     End Sub
 
     Private Sub GetDataFromDmtEntities()
 
-        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & My.Resources.DmtServerName & ";LIST={" & My.Resources.EntitiesGUID & "};"
+        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & oSpConn.DmtServerName & ";LIST={" & oSpConn.EntitiesGUID & "};"
         Dim SpConnection As New OleDbConnection(connString)
         Dim oCommand As New OleDbCommand("SELECT [CoCd], [EntityName], [Regex] FROM [DmtEntities]", SpConnection)
         Dim oAdapter As New OleDbDataAdapter(oCommand)
 
-        oAdapter.Fill(DmtDataSet, "Entities")
+        Try
+            oAdapter.Fill(DmtDataSet, "Entities")
+        Catch ex As OleDbException
+            MessageBox.Show(ex.Message)
+        End Try
+
 
     End Sub
 
     Private Sub GetDataFromDmtHelpers()
 
-        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & My.Resources.DmtServerName & ";LIST={" & My.Resources.HelpersGUID & "};"
+        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & My.Resources.DmtServerName & ";LIST={" & oSpConn.HelpersGUID & "};"
         Dim SpConnection As New OleDbConnection(connString)
         Dim oCommand As New OleDbCommand("SELECT [Category], [ValueText] FROM [dmtHelper]", SpConnection)
         Dim oAdapter As New OleDbDataAdapter(oCommand)
 
-        oAdapter.Fill(DmtDataSet, "Helpers")
+        Try
+            oAdapter.Fill(DmtDataSet, "Helpers")
 
-        CreateRegexPatternTotals()
-        CreateRegexPatternCreditNotes()
+            CreateRegexPatternTotals()
+            CreateRegexPatternCreditNotes()
 
+        Catch ex As OleDbException
+            MessageBox.Show(ex.Message)
+        End Try
     End Sub
 
     Private Sub CreateRegexPatternTotals()
@@ -886,7 +899,7 @@ Public Class DmtFormMain
     End Sub
 
     Private Sub AddToTracking(oMail As MailItem, OneFileSelected As Boolean, oListItem As ListViewItem)
-        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=0;RetrieveIDS=Yes;DATABASE=" & My.Resources.DmtServerName & ";LIST={" & My.Resources.TrackingGUID & "};"
+        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=0;RetrieveIDS=Yes;DATABASE=" & oSpConn.DmtServerName & ";LIST={" & oSpConn.TrackingGUID & "};"
         Dim insertQuery As String
         Dim rowsAffected As Integer
         Dim fileName As String
@@ -897,7 +910,7 @@ Public Class DmtFormMain
             fileName = oListItem.SubItems(1).Text
         End If
 
-        insertQuery = "INSERT INTO [" & My.Resources.TrackingGUID & "] "
+        insertQuery = "INSERT INTO [" & oSpConn.TrackingGUID & "] "
         insertQuery += "([ConversationID], [DocName], [DocCategory], [CoCd], [Erp], [RecivedDate], [From], [DmtUserName], [Subject]) "
         insertQuery += "VALUES('" & oMail.ConversationID & "','" & fileName & "','" & ListBoxDocumentTypes.SelectedItem & "', '"
         insertQuery += ListBoxCoCds.SelectedItem & " ','" & ListBoxErps.SelectedValue & "','" & oMail.ReceivedTime.ToString("yyyy-MM-dd") & "', '"

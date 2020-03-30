@@ -21,4 +21,10 @@ Public Class RibbonDmt
             oDmtFormMain.Show()
         End If
     End Sub
+
+    Private Sub ButtonSpOption_Click(sender As Object, e As RibbonControlEventArgs) Handles ButtonSpOption.Click
+        Dim oSpConnectionsForm As New FormSpConnections
+
+        oSpConnectionsForm.ShowDialog()
+    End Sub
 End Class

@@ -44,6 +44,7 @@
         Me.tabDmt = Me.Factory.CreateRibbonTab
         Me.groupDmt = Me.Factory.CreateRibbonGroup
         Me.ButtonDmt = Me.Factory.CreateRibbonButton
+        Me.ButtonSpOption = Me.Factory.CreateRibbonButton
         Me.tabDmt.SuspendLayout()
         Me.groupDmt.SuspendLayout()
         Me.SuspendLayout()
@@ -58,6 +59,7 @@
         'groupDmt
         '
         Me.groupDmt.Items.Add(Me.ButtonDmt)
+        Me.groupDmt.Items.Add(Me.ButtonSpOption)
         Me.groupDmt.Label = "Dmt tools"
         Me.groupDmt.Name = "groupDmt"
         '
@@ -68,6 +70,14 @@
         Me.ButtonDmt.Name = "ButtonDmt"
         Me.ButtonDmt.OfficeImageId = "GroupPivotTableSort"
         Me.ButtonDmt.ShowImage = True
+        '
+        'ButtonSpOption
+        '
+        Me.ButtonSpOption.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.ButtonSpOption.Label = "SP connection"
+        Me.ButtonSpOption.Name = "ButtonSpOption"
+        Me.ButtonSpOption.OfficeImageId = "GroupSharepointLists"
+        Me.ButtonSpOption.ShowImage = True
         '
         'RibbonDmt
         '
@@ -85,6 +95,7 @@
     Friend WithEvents tabDmt As Microsoft.Office.Tools.Ribbon.RibbonTab
     Friend WithEvents groupDmt As Microsoft.Office.Tools.Ribbon.RibbonGroup
     Friend WithEvents ButtonDmt As Microsoft.Office.Tools.Ribbon.RibbonButton
+    Friend WithEvents ButtonSpOption As Microsoft.Office.Tools.Ribbon.RibbonButton
 End Class
 
 Partial Class ThisRibbonCollection
