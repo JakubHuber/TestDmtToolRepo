@@ -348,19 +348,7 @@ Public Class DmtFormMain
 
     End Sub
 
-    Private Sub ButtonOpenFolder_Click() Handles ButtonOpenFolder.Click
-        Dim selectFolderDialog As New FolderBrowserDialog
 
-        With selectFolderDialog
-            .RootFolder = Environment.SpecialFolder.Desktop
-            .SelectedPath = My.Settings.saveFolderPath.ToString
-            If .ShowDialog = DialogResult.OK Then
-                My.Settings.saveFolderPath = .SelectedPath
-                txtFolderPath.Text = My.Settings.saveFolderPath
-            End If
-        End With
-
-    End Sub
     Private Sub DownloadDataFromSP()
 
         SetUpTool()
@@ -1019,7 +1007,7 @@ Public Class DmtFormMain
         End If
     End Sub
 
-    Private Sub ButtonOpenFolder_Click(sender As Object, e As EventArgs) Handles ButtonOpenFolder.Click
+    Private Sub ButtonOpenFolder_Click() Handles ButtonOpenFolder.Click
         Dim selectFolderDialog As New FolderBrowserDialog
 
         With selectFolderDialog
@@ -1170,4 +1158,28 @@ Public Class DmtFormMain
             End If
         End If
     End Sub
+
+    Private Sub txtFolderPath_Leave(sender As Object, e As EventArgs) Handles txtFolderPath.Leave
+        Dim pathText As String = txtFolderPath.Text
+
+        If pathText.StartsWith("https:") Then
+            pathText = pathText.Replace("https:", vbNullString)
+            pathText = pathText.Replace("%20", " ")
+        End If
+
+        If Directory.Exists(pathText) Then
+            My.Settings.saveFolderPath = pathText
+
+            ToolStripLabelMessages.Text = "Default path saved"
+            ToolStripLabelMessages.ForeColor = System.Drawing.Color.SeaGreen
+
+        Else
+
+            ToolStripLabelMessages.Text = "Default path not saved"
+            ToolStripLabelMessages.ForeColor = System.Drawing.Color.DeepPink
+
+        End If
+
+    End Sub
+
 End Class
