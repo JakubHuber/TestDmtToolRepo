@@ -26,7 +26,22 @@ Enum DmtDocTypes
     IG_NON_PO_INVOICE_FI = 15
     MM_PO_INVOICES = 16
     FI_NON_PO_INVOICES = 17
-    CN_AVOIR
+    CN_AVOIR = 18
+    FI_credit = 19
+    FI_credit_IG = 20
+    FI = 21
+    FI_IG = 22
+    FI_urgent = 23
+    MM_credit_IG = 24
+    MM_credit_IGHM = 25
+    MM_credit_HM = 26
+    MM_credit = 27
+    MM_credit_urgent = 28
+    MM_IGHM = 30
+    MM = 31
+    MM_HM = 32
+    MM_IG = 33
+    MM_urgent = 34
 End Enum
 
 Public Enum DmtStatuses
@@ -539,6 +554,25 @@ Public Class DmtFormMain
                     .Add(DmtDocTypes.FI_NON_PO_INVOICES.ToString)
                     .Add(DmtDocTypes.CN_AVOIR.ToString)
                 End With
+
+            Case "P31"
+                With ListBoxDocumentTypes.Items
+                    .Add(DmtDocTypes.FI_credit.ToString)
+                    .Add(DmtDocTypes.FI_credit_IG.ToString)
+                    .Add(DmtDocTypes.FI.ToString)
+                    .Add(DmtDocTypes.FI_IG.ToString)
+                    .Add(DmtDocTypes.FI_urgent.ToString)
+                    .Add(DmtDocTypes.MM_credit_IG.ToString)
+                    .Add(DmtDocTypes.MM_credit_IGHM.ToString)
+                    .Add(DmtDocTypes.MM_credit_HM.ToString)
+                    .Add(DmtDocTypes.MM_credit.ToString)
+                    .Add(DmtDocTypes.MM_credit_urgent.ToString)
+                    .Add(DmtDocTypes.MM_IGHM.ToString)
+                    .Add(DmtDocTypes.MM.ToString)
+                    .Add(DmtDocTypes.MM_HM.ToString)
+                    .Add(DmtDocTypes.MM_IG.ToString)
+                    .Add(DmtDocTypes.MM_urgent.ToString)
+                End With
         End Select
 
     End Sub
@@ -870,6 +904,9 @@ Public Class DmtFormMain
                     ChangeStatus(oMail, oListItem)
                     ColorListViewLine(oListItem)
                     AddToTracking(oMail, OneFileSelected, oListItem)
+
+                    ToolStripLabelMessages.Text = "Attachment saved"
+                    ToolStripLabelMessages.ForeColor = System.Drawing.Color.SeaGreen
 
                 End If
 

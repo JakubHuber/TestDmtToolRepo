@@ -133,7 +133,7 @@
     <value>d6afd335-761f-4a95-b4cc-3830cfdf579a</value>
   </data>
   <data name="jsonConnections" xml:space="preserve">
-    <value>{'Connection': [{'Name': 'Krk','DmtServerName': 'https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository','CoCdGUID': 'e7f970b8-9bd1-4855-9fe1-7abb2f5279c1','ToolVersionGUID': 'e3af78c1-8624-42ee-b0af-38f7b0e6198d','EntitiesGUID': '57e39fdf-5528-4f5c-9fc2-d1b0eaf461ae','HelpersGUID': 'd6afd335-761f-4a95-b4cc-3830cfdf579a','TrackingGUID': '64ADA00E-56E7-4F99-AD63-19EE545DC97E'},{'Name': 'Rpa','DmtServerName': 'https://eu001-sp.shell.com/sites','CoCdGUID': 'e7f970b8','ToolVersionGUID': 'e3af78c1','EntitiesGUID': '57e39fdf','HelpersGUID': 'd6afd335','TrackingGUID': '64ADA00E'}]}</value>
+    <value>{'Connection': [{'Name': 'Krk','DmtServerName': 'https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository','CoCdGUID': 'e7f970b8-9bd1-4855-9fe1-7abb2f5279c1','ToolVersionGUID': 'e3af78c1-8624-42ee-b0af-38f7b0e6198d','EntitiesGUID': '57e39fdf-5528-4f5c-9fc2-d1b0eaf461ae','HelpersGUID': 'd6afd335-761f-4a95-b4cc-3830cfdf579a','TrackingGUID': '64ADA00E-56E7-4F99-AD63-19EE545DC97E'},{'Name': 'Rpa','DmtServerName': 'https://nga001-sp.shell.com/sites/AFFAA0956','CoCdGUID': 'f738e8f2-9f4c-4b00-9cc8-e0758c7b9c90','ToolVersionGUID': '2ee35222-099a-4d5e-b68c-e73fc4062643','EntitiesGUID': '405c8468-5d1e-4ccf-a728-04c54114b715','HelpersGUID': 'DD5A34C9-5697-4776-A13F-1D7D3C62CEDA','TrackingGUID': 'e5f00edc-e45e-4627-9fde-737ee33e4a08'}]}</value>
   </data>
   <data name="temporaryFolderPath" xml:space="preserve">
     <value>C:\Apps\DTRTemp\</value>
