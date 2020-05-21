@@ -75,6 +75,8 @@ Public Class DmtFormMain
             Me.Text += " " & ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
         End If
 
+        Me.Text += " " & My.Settings.connName
+
         SetupConnection()
 
         txtFolderPath.Text = My.Settings.saveFolderPath.ToString
@@ -471,7 +473,7 @@ Public Class DmtFormMain
 
     Private Sub GetDataFromDmtHelpers()
 
-        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & My.Resources.DmtServerName & ";LIST={" & oSpConn.HelpersGUID & "};"
+        Dim connString As String = "Provider=Microsoft.ACE.OLEDB.12.0;WSS; IMEX=2;RetrieveIDS=Yes;DATABASE=" & oSpConn.DmtServerName & ";LIST={" & oSpConn.HelpersGUID & "};"
         Dim SpConnection As New OleDbConnection(connString)
         Dim oCommand As New OleDbCommand("SELECT [Category], [ValueText] FROM [dmtHelper]", SpConnection)
         Dim oAdapter As New OleDbDataAdapter(oCommand)
@@ -573,6 +575,15 @@ Public Class DmtFormMain
                     .Add(DmtDocTypes.MM_IG.ToString)
                     .Add(DmtDocTypes.MM_urgent.ToString)
                 End With
+
+            Case "P16YP"
+                With ListBoxDocumentTypes.Items
+                    .Add(DmtDocTypes.ZMMINVOICE.ToString)
+                    .Add(DmtDocTypes.ZMMCREDNOTE.ToString)
+                    .Add(DmtDocTypes.ZFIINVOICE.ToString)
+                    .Add(DmtDocTypes.ZFICREDNOTE.ToString)
+                End With
+
         End Select
 
     End Sub
