@@ -68,6 +68,7 @@ Partial Class DmtFormMain
         Me.LabelTotal = New System.Windows.Forms.Label()
         Me.LabelPo = New System.Windows.Forms.Label()
         Me.LabelScan = New System.Windows.Forms.Label()
+        Me.ToolStripMenuItemPersistCoCd = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMain.SuspendLayout()
         Me.GroupBoxSuggestions.SuspendLayout()
         Me.SuspendLayout()
@@ -124,7 +125,7 @@ Partial Class DmtFormMain
         'ToolStripDropDownButtonOptions
         '
         Me.ToolStripDropDownButtonOptions.BackColor = System.Drawing.Color.FromArgb(CType(CType(223, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(102, Byte), Integer))
-        Me.ToolStripDropDownButtonOptions.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemCenterFilter, Me.ToolStripSeparator4, Me.ToolStripMenuItemShowToolBar, Me.ToolStripMenuItemFitPage, Me.ToolStripMenuItemFitWidth, Me.ToolStripMenuItemShowThumbs, Me.ToolStripSeparator5, Me.ToolStripMenuItemShowSuggestions, Me.ToolStripMenuItemSelectSuggestions, Me.ToolStripSeparator6, Me.ToolStripMenuItemTopWindow})
+        Me.ToolStripDropDownButtonOptions.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemCenterFilter, Me.ToolStripSeparator4, Me.ToolStripMenuItemShowToolBar, Me.ToolStripMenuItemFitPage, Me.ToolStripMenuItemFitWidth, Me.ToolStripMenuItemShowThumbs, Me.ToolStripSeparator5, Me.ToolStripMenuItemShowSuggestions, Me.ToolStripMenuItemSelectSuggestions, Me.ToolStripMenuItemPersistCoCd, Me.ToolStripSeparator6, Me.ToolStripMenuItemTopWindow})
         Me.ToolStripDropDownButtonOptions.Image = CType(resources.GetObject("ToolStripDropDownButtonOptions.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButtonOptions.ImageTransparentColor = System.Drawing.Color.White
         Me.ToolStripDropDownButtonOptions.Name = "ToolStripDropDownButtonOptions"
@@ -134,65 +135,65 @@ Partial Class DmtFormMain
         'ToolStripMenuItemCenterFilter
         '
         Me.ToolStripMenuItemCenterFilter.Name = "ToolStripMenuItemCenterFilter"
-        Me.ToolStripMenuItemCenterFilter.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemCenterFilter.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemCenterFilter.Text = "Filter CoCds"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(180, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(196, 6)
         '
         'ToolStripMenuItemShowToolBar
         '
         Me.ToolStripMenuItemShowToolBar.Enabled = False
         Me.ToolStripMenuItemShowToolBar.Name = "ToolStripMenuItemShowToolBar"
-        Me.ToolStripMenuItemShowToolBar.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemShowToolBar.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemShowToolBar.Text = "Pdf - show toolbar"
         '
         'ToolStripMenuItemFitPage
         '
         Me.ToolStripMenuItemFitPage.Name = "ToolStripMenuItemFitPage"
-        Me.ToolStripMenuItemFitPage.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemFitPage.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemFitPage.Text = "Pdf - fit page"
         '
         'ToolStripMenuItemFitWidth
         '
         Me.ToolStripMenuItemFitWidth.Name = "ToolStripMenuItemFitWidth"
-        Me.ToolStripMenuItemFitWidth.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemFitWidth.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemFitWidth.Text = "Pdf - fit width"
         '
         'ToolStripMenuItemShowThumbs
         '
         Me.ToolStripMenuItemShowThumbs.Name = "ToolStripMenuItemShowThumbs"
-        Me.ToolStripMenuItemShowThumbs.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemShowThumbs.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemShowThumbs.Text = "Pdf - Show thumbs"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(180, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(196, 6)
         '
         'ToolStripMenuItemShowSuggestions
         '
         Me.ToolStripMenuItemShowSuggestions.Name = "ToolStripMenuItemShowSuggestions"
-        Me.ToolStripMenuItemShowSuggestions.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemShowSuggestions.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemShowSuggestions.Text = "Show suggestions"
         '
         'ToolStripMenuItemSelectSuggestions
         '
         Me.ToolStripMenuItemSelectSuggestions.Name = "ToolStripMenuItemSelectSuggestions"
-        Me.ToolStripMenuItemSelectSuggestions.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemSelectSuggestions.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemSelectSuggestions.Text = "Select suggestions"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(180, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(196, 6)
         '
         'ToolStripMenuItemTopWindow
         '
         Me.ToolStripMenuItemTopWindow.Name = "ToolStripMenuItemTopWindow"
-        Me.ToolStripMenuItemTopWindow.Size = New System.Drawing.Size(183, 22)
+        Me.ToolStripMenuItemTopWindow.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemTopWindow.Text = "Keep window on top"
         '
         'ToolStripSeparator3
@@ -463,6 +464,12 @@ Partial Class DmtFormMain
         Me.LabelScan.Text = "SCAN"
         Me.LabelScan.Visible = False
         '
+        'ToolStripMenuItemPersistCoCd
+        '
+        Me.ToolStripMenuItemPersistCoCd.Name = "ToolStripMenuItemPersistCoCd"
+        Me.ToolStripMenuItemPersistCoCd.Size = New System.Drawing.Size(199, 22)
+        Me.ToolStripMenuItemPersistCoCd.Text = "Keep CoCd among Erps"
+        '
         'DmtFormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -543,4 +550,5 @@ Partial Class DmtFormMain
     Friend WithEvents LabelScan As Windows.Forms.Label
     Friend WithEvents ToolStripMenuItemSelectSuggestions As Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator6 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripMenuItemPersistCoCd As Windows.Forms.ToolStripMenuItem
 End Class

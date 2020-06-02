@@ -383,6 +383,7 @@ Public Class DmtFormMain
         ToolStripMenuItemSelectSuggestions.Checked = My.Settings.selectSuggestions
         ToolStripMenuItemShowThumbs.Checked = My.Settings.pdfShowThumbs
         ToolStripMenuItemTopWindow.Checked = My.Settings.topWindow
+        ToolStripMenuItemPersistCoCd.Checked = My.Settings.PersistCoCd
 
         Me.TopMost = My.Settings.topWindow
 
@@ -591,8 +592,13 @@ Public Class DmtFormMain
     Private Sub ListBoxErps_SelectedValueChanged(sender As Object, e As EventArgs) Handles ListBoxErps.SelectedValueChanged
         Dim selectedRows As DataRow()
         Dim oRow As DataRow
+        Dim lastSelectedCoCd As String = String.Empty
+        Dim index As Integer
 
         If Not ListBoxErps.SelectedValue Is Nothing Then
+
+            If ListBoxCoCds.SelectedIndex > -1 Then lastSelectedCoCd = ListBoxCoCds.SelectedItem
+
             ListBoxCoCds.Items.Clear()
 
             selectedRows = DmtDataSet.Tables("CoCds").Select("ERP ='" & ListBoxErps.SelectedValue & "'", "CoCd Asc")
@@ -602,6 +608,17 @@ Public Class DmtFormMain
 
         End If
 
+        If lastSelectedCoCd <> String.Empty Then
+            If My.Settings.PersistCoCd Then
+
+                index = ListBoxCoCds.FindString(lastSelectedCoCd)
+
+                If index > -1 Then
+                    ListBoxCoCds.SetSelected(index, True)
+                End If
+
+            End If
+        End If
         FillDocumentTypesComboBox()
 
     End Sub
@@ -1174,6 +1191,11 @@ Public Class DmtFormMain
         End If
     End Sub
 
+    Private Sub ToolStripMenuItemPersistCoCd_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemPersistCoCd.Click
+        ToolStripMenuItemPersistCoCd.Checked = Not ToolStripMenuItemPersistCoCd.Checked
+        My.Settings.PersistCoCd = ToolStripMenuItemPersistCoCd.Checked
+    End Sub
+
     Private Sub DmtFormMain_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         My.Settings.Save()
 
@@ -1229,5 +1251,6 @@ Public Class DmtFormMain
         End If
 
     End Sub
+
 
 End Class
