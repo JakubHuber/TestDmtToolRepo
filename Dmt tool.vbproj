@@ -34,7 +34,7 @@
     <PublishUrl>\\eu001-sp.shell.com\sites\AAAAA4854\GlobalProjects\TMToolkit\myRTV\Global-RTV-Repository\Shared Documents\DmtPublishTest\</PublishUrl>
     <InstallUrl>//eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Shared%2520Documents/DmtPublishTest/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.1.34</ApplicationVersion>
+    <ApplicationVersion>1.0.1.35</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>1</UpdateInterval>
