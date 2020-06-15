@@ -42,6 +42,13 @@ Enum DmtDocTypes
     MM_HM = 32
     MM_IG = 33
     MM_urgent = 34
+    FIINVOICE_URG = 35
+    FIINVOICE_RUS = 36
+    FIINVOICE_NOR = 37
+    MMIINVOICE_DC_USD = 38
+    MMIINVOICE_DC_NGN = 39
+    MMIINVOICE_NOR = 40
+    FIIPAYMENT = 41
 End Enum
 
 Public Enum DmtStatuses
@@ -583,6 +590,17 @@ Public Class DmtFormMain
                     .Add(DmtDocTypes.ZMMCREDNOTE.ToString)
                     .Add(DmtDocTypes.ZFIINVOICE.ToString)
                     .Add(DmtDocTypes.ZFICREDNOTE.ToString)
+                End With
+
+            Case "P47"
+                With ListBoxDocumentTypes.Items
+                    .Add(DmtDocTypes.FIINVOICE_URG.ToString)
+                    .Add(DmtDocTypes.FIINVOICE_RUS.ToString)
+                    .Add(DmtDocTypes.FIINVOICE_NOR.ToString)
+                    .Add(DmtDocTypes.MMIINVOICE_DC_USD.ToString)
+                    .Add(DmtDocTypes.MMIINVOICE_DC_NGN.ToString)
+                    .Add(DmtDocTypes.MMIINVOICE_NOR.ToString)
+                    .Add(DmtDocTypes.FIIPAYMENT.ToString)
                 End With
 
         End Select
@@ -1152,27 +1170,65 @@ Public Class DmtFormMain
     End Sub
 
     Private Sub ToolStripMenuItemSuggestionsSP_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSuggestionsSP.Click
-        Try
-            System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/dmtHelper/AllItems.aspx")
-        Catch
 
-        End Try
+        If oSpConn.Name = "Krk" Then
+
+            Try
+                System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/dmtHelper/AllItems.aspx")
+            Catch
+
+            End Try
+
+        ElseIf oSpConn.Name = "Rpa" Then
+
+            Try
+                System.Diagnostics.Process.Start("https://nga001-sp.shell.com/sites/AFFAA0956/Lists/dmtHelper/AllItems.aspx")
+            Catch
+
+            End Try
+
+        End If
     End Sub
 
     Private Sub EntitiesSPListToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EntitiesSPListToolStripMenuItem.Click
-        Try
-            System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/DmtEntities/AllItems.aspx")
-        Catch
+        If oSpConn.Name = "Krk" Then
 
-        End Try
+            Try
+                System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/DmtEntities/AllItems.aspx")
+            Catch
+
+            End Try
+
+        ElseIf oSpConn.Name = "Rpa" Then
+
+            Try
+                System.Diagnostics.Process.Start("https://nga001-sp.shell.com/sites/AFFAA0956/Lists/DmtEntities/AllItems.aspx")
+            Catch
+
+            End Try
+
+
+        End If
     End Sub
 
     Private Sub CoCdsSPListToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CoCdsSPListToolStripMenuItem.Click
-        Try
-            System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/DmtCoCd/AllItems.aspx")
-        Catch
+        If oSpConn.Name = "Krk" Then
 
-        End Try
+            Try
+                System.Diagnostics.Process.Start("https://eu001-sp.shell.com/sites/AAAAA4854/GlobalProjects/TMToolkit/myRTV/Global-RTV-Repository/Lists/DmtCoCd/AllItems.aspx")
+            Catch
+
+            End Try
+
+        ElseIf oSpConn.Name = "Rpa" Then
+
+            Try
+                System.Diagnostics.Process.Start("https://nga001-sp.shell.com/sites/AFFAA0956/Lists/DmtCoCd/AllItems.aspx")
+            Catch
+
+            End Try
+
+        End If
     End Sub
 
     Private Sub ToolStripMenuItemTopWindow_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemTopWindow.Click
