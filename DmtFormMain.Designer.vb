@@ -39,6 +39,7 @@ Partial Class DmtFormMain
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItemShowSuggestions = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemSelectSuggestions = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItemPersistCoCd = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItemTopWindow = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -68,7 +69,6 @@ Partial Class DmtFormMain
         Me.LabelTotal = New System.Windows.Forms.Label()
         Me.LabelPo = New System.Windows.Forms.Label()
         Me.LabelScan = New System.Windows.Forms.Label()
-        Me.ToolStripMenuItemPersistCoCd = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMain.SuspendLayout()
         Me.GroupBoxSuggestions.SuspendLayout()
         Me.SuspendLayout()
@@ -184,6 +184,12 @@ Partial Class DmtFormMain
         Me.ToolStripMenuItemSelectSuggestions.Name = "ToolStripMenuItemSelectSuggestions"
         Me.ToolStripMenuItemSelectSuggestions.Size = New System.Drawing.Size(199, 22)
         Me.ToolStripMenuItemSelectSuggestions.Text = "Select suggestions"
+        '
+        'ToolStripMenuItemPersistCoCd
+        '
+        Me.ToolStripMenuItemPersistCoCd.Name = "ToolStripMenuItemPersistCoCd"
+        Me.ToolStripMenuItemPersistCoCd.Size = New System.Drawing.Size(199, 22)
+        Me.ToolStripMenuItemPersistCoCd.Text = "Keep CoCd among Erps"
         '
         'ToolStripSeparator6
         '
@@ -464,16 +470,10 @@ Partial Class DmtFormMain
         Me.LabelScan.Text = "SCAN"
         Me.LabelScan.Visible = False
         '
-        'ToolStripMenuItemPersistCoCd
-        '
-        Me.ToolStripMenuItemPersistCoCd.Name = "ToolStripMenuItemPersistCoCd"
-        Me.ToolStripMenuItemPersistCoCd.Size = New System.Drawing.Size(199, 22)
-        Me.ToolStripMenuItemPersistCoCd.Text = "Keep CoCd among Erps"
-        '
         'DmtFormMain
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(154, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(171, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1141, 564)
