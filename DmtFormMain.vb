@@ -49,6 +49,11 @@ Enum DmtDocTypes
     MMIINVOICE_DC_NGN = 39
     MMIINVOICE_NOR = 40
     FIIPAYMENT = 41
+    ZFIICREDIT = 42
+    ZFIINVPREL = 43
+    MMREJECT = 44
+    FIREJECT = 45
+    MMIINVOICE_RUS = 46
 End Enum
 
 Public Enum DmtStatuses
@@ -600,7 +605,15 @@ Public Class DmtFormMain
                     .Add(DmtDocTypes.MMIINVOICE_DC_USD.ToString)
                     .Add(DmtDocTypes.MMIINVOICE_DC_NGN.ToString)
                     .Add(DmtDocTypes.MMIINVOICE_NOR.ToString)
+                    .Add(DmtDocTypes.MMIINVOICE_RUS.ToString)
                     .Add(DmtDocTypes.FIIPAYMENT.ToString)
+                    .Add(DmtDocTypes.MMREJECT.ToString)
+                    .Add(DmtDocTypes.FIREJECT.ToString)
+                End With
+
+            Case "P26"
+                With ListBoxDocumentTypes.Items
+                    .Add(DmtDocTypes.ZMMINVOICE.ToString)
                 End With
 
         End Select
