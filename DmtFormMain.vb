@@ -280,9 +280,12 @@ Public Class DmtFormMain
 
             Else
 
-                If mailCategories = vbNullString Then
-                    mailCategories = "Check_Dmt"
+                mailCategories = mailCategories.Replace("Completed_Dmt", vbNullString)
+
+                If mailCategories.IndexOf("Check_Dmt") = -1 Then
+                    mailCategories = mailCategories & ";Check_Dmt"
                 End If
+
             End If
 
             oMail.Categories = mailCategories
